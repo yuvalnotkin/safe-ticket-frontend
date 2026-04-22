@@ -77,7 +77,7 @@ export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
             </svg>
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-5 py-4">{children}</div>
+        <div className="overflow-y-auto px-5 py-4">{children}</div>
         {footer && (
           <div className="border-t border-navy-100 bg-navy-50 px-5 py-4">
             {footer}

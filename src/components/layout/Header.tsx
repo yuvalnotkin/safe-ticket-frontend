@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sheet } from "@/components/ui/Sheet";
 import { LanguageToggle } from "./LanguageToggle";
@@ -15,6 +15,26 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Force-close the mobile nav when the viewport is ≥md (768px). The
+  // hamburger trigger is `md:hidden`, so once the menu is open and the
+  // user resizes up — or HMR / back-forward cache preserves menuOpen=true
+  // across a viewport-size change — there'd otherwise be no way to close
+  // it. Initial check is deferred via setTimeout so setState isn't called
+  // synchronously inside the effect body (React 19 lint rule).
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const close = () => setMenuOpen(false);
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) close();
+    };
+    const id = mq.matches ? window.setTimeout(close, 0) : 0;
+    mq.addEventListener("change", onChange);
+    return () => {
+      window.clearTimeout(id);
+      mq.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const navLinks: Array<{ label: string; href: string }> = [
     { label: t("nav.browse"), href: "/search" },

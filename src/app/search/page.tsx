@@ -58,6 +58,24 @@ function SearchPageInner() {
     return () => window.clearTimeout(id);
   }, []);
 
+  // Same rationale as the Header's md watcher: the mobile filters button is
+  // `md:hidden`, so once the sheet is open on mobile and the user resizes
+  // to desktop, there'd otherwise be no trigger to close it. Initial check
+  // is deferred to avoid sync setState inside the effect body.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const close = () => setMobileFiltersOpen(false);
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) close();
+    };
+    const id = mq.matches ? window.setTimeout(close, 0) : 0;
+    mq.addEventListener("change", onChange);
+    return () => {
+      window.clearTimeout(id);
+      mq.removeEventListener("change", onChange);
+    };
+  }, []);
+
   const debouncedQuery = useDebouncedValue(query, 200);
   const effectiveFilters = useMemo<SearchFilters>(
     () => ({ ...filters, query: debouncedQuery }),
