@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { Accordion, AccordionItem } from "@/components/ui/Accordion";
+import { useToast } from "@/components/ui/Toast";
 import { VerificationBadge } from "@/components/ticket/VerificationBadge";
 import { PriceBreakdown } from "@/components/ticket/PriceBreakdown";
 import { TicketCard } from "@/components/ticket/TicketCard";
+import { TransactionTimeline } from "@/components/ticket/TransactionTimeline";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Ticket } from "@/lib/types";
 
@@ -184,7 +187,79 @@ export default function StyleGuidePage() {
           </StateGroup>
         </div>
       </Section>
+
+      <Section title={t("styleGuide.timeline")}>
+        <div className="grid gap-6 md:grid-cols-3">
+          <StateGroup label="All upcoming">
+            <div className="w-full rounded-md border border-navy-100 bg-surface p-5">
+              <TransactionTimeline currentStep={-1} />
+            </div>
+          </StateGroup>
+          <StateGroup label="Mid-flow (step 2 active)">
+            <div className="w-full rounded-md border border-navy-100 bg-surface p-5">
+              <TransactionTimeline currentStep={1} />
+            </div>
+          </StateGroup>
+          <StateGroup label="Completed">
+            <div className="w-full rounded-md border border-navy-100 bg-surface p-5">
+              <TransactionTimeline currentStep={4} />
+            </div>
+          </StateGroup>
+        </div>
+      </Section>
+
+      <Section title={t("styleGuide.accordion")}>
+        <div className="max-w-2xl">
+          <Accordion>
+            <AccordionItem
+              question={t("faq.q1")}
+              defaultOpen
+            >
+              {t("faq.a1")}
+            </AccordionItem>
+            <AccordionItem question={t("faq.q2")}>{t("faq.a2")}</AccordionItem>
+            <AccordionItem question={t("faq.q3")}>{t("faq.a3")}</AccordionItem>
+          </Accordion>
+        </div>
+      </Section>
+
+      <Section title={t("styleGuide.toast")}>
+        <ToastDemo />
+      </Section>
     </main>
+  );
+}
+
+function ToastDemo() {
+  const toast = useToast();
+  return (
+    <div className="flex flex-wrap gap-3">
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => toast.show("Info toast — tap to dismiss.", { tone: "info" })}
+      >
+        Info
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() =>
+          toast.show("Success toast — nicely done.", { tone: "success" })
+        }
+      >
+        Success
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() =>
+          toast.show("Warning toast — pay attention.", { tone: "warning" })
+        }
+      >
+        Warning
+      </Button>
+    </div>
   );
 }
 
