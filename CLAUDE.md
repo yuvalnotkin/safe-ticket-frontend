@@ -29,7 +29,7 @@ src/
   styles/        → Global styles, Tailwind config customizations
 
 ## Current Sprint
-Phase 1, Sprint 1.2 — Homepage + Search Results complete. Next: Sprint 1.3 (Ticket details, static pages, global nav + language toggle), pending human approval per `PHASE_1_PLAN.md`.
+Phase 1 complete. Full walkthrough: `/` → `/search` → `/tickets/[id]` → `/how-it-works` → `/faq` → `/login`. Next: Phase 2 planning (backend integration), pending human direction.
 
 ## API Contract
 See API_CONTRACT.md for all backend endpoints.
