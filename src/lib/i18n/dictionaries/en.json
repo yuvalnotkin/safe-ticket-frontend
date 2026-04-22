@@ -7,6 +7,9 @@
     "save": "Save",
     "loading": "Loading…",
     "search": "Search",
+    "apply": "Apply",
+    "reset": "Reset",
+    "close": "Close",
     "comingSoon": "Coming soon",
     "notYetAvailable": "Not yet available"
   },
@@ -28,7 +31,90 @@
     "seat": "Seat",
     "row": "Row",
     "section": "Section",
-    "provider": "Provider"
+    "provider": "Provider",
+    "placeholderTitle": "Ticket details",
+    "placeholderBody": "The full ticket-details page is built in the next sprint."
+  },
+  "category": {
+    "all": "All",
+    "sports": "Sports",
+    "culture": "Culture"
+  },
+  "providerName": {
+    "ticketmaster": "Ticketmaster",
+    "leaan": "Le'an",
+    "eventim": "Eventim",
+    "hadran": "Hadran"
+  },
+  "home": {
+    "heroTitle": "Verified tickets. Face value. Zero worries.",
+    "heroSubtitle": "The secondary-resale platform that connects ticket holders with buyers — through the provider's own transfer, with funds held in escrow, at the original face value only.",
+    "searchPlaceholder": "Event, artist, team…",
+    "searchCta": "Search tickets",
+    "trustIntro": "Why Safe Ticket?",
+    "trustVerifiedTitle": "Verified ticket",
+    "trustVerifiedBody": "Every ticket is verified with the provider before it's listed — no surprises at the door.",
+    "trustFaceValueTitle": "Face value only",
+    "trustFaceValueBody": "Sellers can't set the price — you pay the original face value, not a shekel more.",
+    "trustOfficialTransferTitle": "Official transfer",
+    "trustOfficialTransferBody": "Tickets move through the provider's own system — no PDFs, no WhatsApp, no guessing.",
+    "trustEscrowTitle": "Funds in escrow",
+    "trustEscrowBody": "The seller gets paid only after the transfer is confirmed on your end. No risk.",
+    "howItWorksTitle": "How it works",
+    "howItWorksStep1Title": "Search and pick",
+    "howItWorksStep1Body": "Find an event, pick a specific seat, see the exact price — no hidden fees.",
+    "howItWorksStep2Title": "Pay into escrow",
+    "howItWorksStep2Body": "Your money sits in escrow until the official transfer reaches you.",
+    "howItWorksStep3Title": "Official transfer",
+    "howItWorksStep3Body": "The ticket reaches you through the provider. Once confirmed, the seller is paid.",
+    "ctaBrowse": "Browse tickets",
+    "refundNote": "Post-transfer refunds are handled by the original ticket provider."
+  },
+  "footer": {
+    "tagline": "Israel's safe secondary marketplace for verified tickets.",
+    "product": "Product",
+    "support": "Help",
+    "legal": "Legal",
+    "browse": "Browse tickets",
+    "sell": "List a ticket",
+    "howItWorks": "How it works",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "copyright": "© 2026 Safe Ticket"
+  },
+  "search": {
+    "title": "Search tickets",
+    "placeholder": "Event, artist, team…",
+    "resultsCount": "{count} results",
+    "singleResult": "1 result",
+    "noResultsTitle": "No tickets match",
+    "noResultsBody": "Try loosening your filters or searching for something else.",
+    "emptyQueryTitle": "Start searching",
+    "emptyQueryBody": "Type an event name, artist, or team — or pick a filter from the list.",
+    "clearFilters": "Clear filters",
+    "openFiltersMobile": "Filters",
+    "applyFilters": "Show results",
+    "activeFilters": "Active filters"
+  },
+  "filters": {
+    "title": "Filters",
+    "eventType": "Event type",
+    "city": "City",
+    "dateRange": "Date range",
+    "dateFrom": "From",
+    "dateTo": "To",
+    "provider": "Provider",
+    "priceRange": "Price range",
+    "minPrice": "Min price",
+    "maxPrice": "Max price"
+  },
+  "sort": {
+    "label": "Sort",
+    "soonest": "Soonest",
+    "lowestPrice": "Lowest price",
+    "newest": "Recently listed"
   },
   "styleGuide": {
     "title": "Design System",

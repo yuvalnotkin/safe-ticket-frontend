@@ -41,7 +41,9 @@ export function TicketCard({ ticket }: TicketCardProps) {
         <div className="flex flex-1 flex-col gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <VerificationBadge />
-            <Badge tone="neutral">{t(`ticket.provider`)}: {ticket.provider}</Badge>
+            <Badge tone="neutral">
+              {t("ticket.provider")}: {t(`providerName.${ticket.provider}`)}
+            </Badge>
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="text-h3 font-semibold text-navy-900">

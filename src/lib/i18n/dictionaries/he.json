@@ -7,6 +7,9 @@
     "save": "שמירה",
     "loading": "טוען…",
     "search": "חיפוש",
+    "apply": "החלה",
+    "reset": "איפוס",
+    "close": "סגירה",
     "comingSoon": "בקרוב",
     "notYetAvailable": "עדיין לא זמין"
   },
@@ -28,7 +31,90 @@
     "seat": "מושב",
     "row": "שורה",
     "section": "יציע",
-    "provider": "ספק"
+    "provider": "ספק",
+    "placeholderTitle": "פרטי כרטיס",
+    "placeholderBody": "דף פרטי הכרטיס המלא ייבנה בספרינט הבא."
+  },
+  "category": {
+    "all": "הכל",
+    "sports": "ספורט",
+    "culture": "תרבות"
+  },
+  "providerName": {
+    "ticketmaster": "Ticketmaster",
+    "leaan": "לאאן",
+    "eventim": "Eventim",
+    "hadran": "הדרן"
+  },
+  "home": {
+    "heroTitle": "כרטיסים מאומתים. מחיר נקוב. אפס חשש.",
+    "heroSubtitle": "פלטפורמת מכירה חוזרת המחברת בין מחזיקי כרטיסים לקונים — דרך ההעברה הרשמית של הספק, עם כסף בנאמנות, במחיר המקורי בלבד.",
+    "searchPlaceholder": "שם אירוע, להקה, קבוצה…",
+    "searchCta": "חיפוש כרטיסים",
+    "trustIntro": "למה Safe Ticket?",
+    "trustVerifiedTitle": "כרטיס מאומת",
+    "trustVerifiedBody": "כל כרטיס עובר אימות מול הספק לפני פרסום — בלי הפתעות בכניסה.",
+    "trustFaceValueTitle": "מחיר נקוב בלבד",
+    "trustFaceValueBody": "המוכר אינו יכול לקבוע את המחיר — תשלמו את המחיר המקורי, לא שקל יותר.",
+    "trustOfficialTransferTitle": "העברה רשמית",
+    "trustOfficialTransferBody": "הכרטיס עובר ישירות דרך מערכת הספק — לא PDF, לא ווטסאפ, לא ספקולציות.",
+    "trustEscrowTitle": "כסף בנאמנות",
+    "trustEscrowBody": "הכסף משוחרר למוכר רק אחרי שההעברה מאושרת אצלכם. בלי חשש.",
+    "howItWorksTitle": "איך זה עובד",
+    "howItWorksStep1Title": "חיפוש ובחירה",
+    "howItWorksStep1Body": "מחפשים אירוע, בוחרים מושב ספציפי, רואים את המחיר המדויק — ללא עמלות נסתרות.",
+    "howItWorksStep2Title": "תשלום בנאמנות",
+    "howItWorksStep2Body": "הכסף יושב בנאמנות עד להשלמת ההעברה הרשמית אליכם.",
+    "howItWorksStep3Title": "העברה רשמית",
+    "howItWorksStep3Body": "הכרטיס עובר אליכם דרך הספק. רק כשהעברה מאושרת, הכסף משוחרר.",
+    "ctaBrowse": "עיון בכרטיסים",
+    "refundNote": "החזרים לאחר העברה מטופלים ע״י הספק המקורי של הכרטיס."
+  },
+  "footer": {
+    "tagline": "השוק המשני הבטוח של ישראל לכרטיסים מאומתים.",
+    "product": "המוצר",
+    "support": "עזרה",
+    "legal": "משפטי",
+    "browse": "עיון בכרטיסים",
+    "sell": "פרסום כרטיס",
+    "howItWorks": "איך זה עובד",
+    "faq": "שאלות נפוצות",
+    "contact": "צור קשר",
+    "terms": "תקנון",
+    "privacy": "פרטיות",
+    "copyright": "© 2026 Safe Ticket"
+  },
+  "search": {
+    "title": "חיפוש כרטיסים",
+    "placeholder": "שם אירוע, להקה, קבוצה…",
+    "resultsCount": "{count} תוצאות",
+    "singleResult": "תוצאה אחת",
+    "noResultsTitle": "לא נמצאו תוצאות",
+    "noResultsBody": "נסו לשחרר את המסננים או לחפש שם אחר.",
+    "emptyQueryTitle": "התחילו לחפש",
+    "emptyQueryBody": "הקלידו שם של אירוע, להקה או קבוצה — או בחרו מסנן מתוך הרשימה.",
+    "clearFilters": "ניקוי מסננים",
+    "openFiltersMobile": "מסננים",
+    "applyFilters": "הצגת תוצאות",
+    "activeFilters": "מסננים פעילים"
+  },
+  "filters": {
+    "title": "מסננים",
+    "eventType": "סוג אירוע",
+    "city": "עיר",
+    "dateRange": "טווח תאריכים",
+    "dateFrom": "מתאריך",
+    "dateTo": "עד תאריך",
+    "provider": "ספק",
+    "priceRange": "טווח מחירים",
+    "minPrice": "מחיר מינימלי",
+    "maxPrice": "מחיר מקסימלי"
+  },
+  "sort": {
+    "label": "מיון",
+    "soonest": "הקרוב ביותר",
+    "lowestPrice": "מחיר מהנמוך לגבוה",
+    "newest": "פורסם לאחרונה"
   },
   "styleGuide": {
     "title": "מערכת עיצוב",
