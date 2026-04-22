@@ -1,0 +1,45 @@
+{
+  "common": {
+    "appName": "Safe Ticket",
+    "buy": "רכישה",
+    "list": "פרסום כרטיס",
+    "cancel": "ביטול",
+    "save": "שמירה",
+    "loading": "טוען…",
+    "search": "חיפוש",
+    "comingSoon": "בקרוב",
+    "notYetAvailable": "עדיין לא זמין"
+  },
+  "trust": {
+    "verified": "מאומת",
+    "faceValue": "מחיר נקוב",
+    "officialTransfer": "העברה רשמית",
+    "escrow": "נאמנות",
+    "verifiedBadge": "כרטיס מאומת"
+  },
+  "price": {
+    "faceValue": "מחיר נקוב",
+    "serviceFee": "עמלת שירות",
+    "total": "סה״כ לתשלום",
+    "currency": "₪"
+  },
+  "ticket": {
+    "viewDetails": "פרטי כרטיס",
+    "seat": "מושב",
+    "row": "שורה",
+    "section": "יציע",
+    "provider": "ספק"
+  },
+  "styleGuide": {
+    "title": "מערכת עיצוב",
+    "intro": "דף פנימי — כל הפרימיטיבים והרכיבים בכל המצבים.",
+    "colors": "צבעים",
+    "typography": "טיפוגרפיה",
+    "buttons": "כפתורים",
+    "inputs": "שדות קלט",
+    "badges": "תגים",
+    "cards": "כרטיסים",
+    "ticketComponents": "רכיבי כרטיס",
+    "primitives": "פרימיטיבים"
+  }
+}

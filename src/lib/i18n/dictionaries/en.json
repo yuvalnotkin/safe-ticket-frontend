@@ -1,0 +1,45 @@
+{
+  "common": {
+    "appName": "Safe Ticket",
+    "buy": "Buy ticket",
+    "list": "List ticket",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Loading…",
+    "search": "Search",
+    "comingSoon": "Coming soon",
+    "notYetAvailable": "Not yet available"
+  },
+  "trust": {
+    "verified": "Verified",
+    "faceValue": "Face value",
+    "officialTransfer": "Official transfer",
+    "escrow": "Escrow",
+    "verifiedBadge": "Verified ticket"
+  },
+  "price": {
+    "faceValue": "Face value",
+    "serviceFee": "Service fee",
+    "total": "Total",
+    "currency": "₪"
+  },
+  "ticket": {
+    "viewDetails": "View details",
+    "seat": "Seat",
+    "row": "Row",
+    "section": "Section",
+    "provider": "Provider"
+  },
+  "styleGuide": {
+    "title": "Design System",
+    "intro": "Internal page — every primitive and component in every state.",
+    "colors": "Colors",
+    "typography": "Typography",
+    "buttons": "Buttons",
+    "inputs": "Inputs",
+    "badges": "Badges",
+    "cards": "Cards",
+    "ticketComponents": "Ticket components",
+    "primitives": "Primitives"
+  }
+}
