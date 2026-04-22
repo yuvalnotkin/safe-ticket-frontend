@@ -10,15 +10,23 @@
     "apply": "Apply",
     "reset": "Reset",
     "close": "Close",
+    "open": "Open",
+    "continue": "Continue",
     "comingSoon": "Coming soon",
-    "notYetAvailable": "Not yet available"
+    "notYetAvailable": "Not yet available",
+    "or": "or"
   },
   "trust": {
     "verified": "Verified",
     "faceValue": "Face value",
     "officialTransfer": "Official transfer",
     "escrow": "Escrow",
-    "verifiedBadge": "Verified ticket"
+    "verifiedBadge": "Verified ticket",
+    "whySafeTitle": "Why is this safe?",
+    "whySafeVerified": "This ticket was verified with the official provider before listing.",
+    "whySafeFaceValue": "You pay only the face value — not a shekel more.",
+    "whySafeTransfer": "The transfer happens through the provider's system, not as a PDF.",
+    "whySafeEscrow": "The seller is paid only after you confirm the transfer."
   },
   "price": {
     "faceValue": "Face value",
@@ -33,7 +41,28 @@
     "section": "Section",
     "provider": "Provider",
     "placeholderTitle": "Ticket details",
-    "placeholderBody": "The full ticket-details page is built in the next sprint."
+    "placeholderBody": "The full ticket-details page is built in the next sprint.",
+    "detailsTitle": "Ticket details",
+    "eventDetails": "Event details",
+    "seatDetails": "Seat details",
+    "seller": "Seller",
+    "sellerSince": "On Safe Ticket since {date}",
+    "sellerRating": "Rating",
+    "sellerTransfers": "Successful transfers",
+    "buyCta": "Secure checkout",
+    "refundNote": "Post-transfer refunds are handled by the original ticket provider.",
+    "timelineTitle": "What happens after you buy",
+    "timelineStep1": "Payment received",
+    "timelineStep1Body": "Your payment is held in our escrow account.",
+    "timelineStep2": "Official transfer kicks off",
+    "timelineStep2Body": "We trigger the transfer through the provider's system.",
+    "timelineStep3": "You confirm receipt",
+    "timelineStep3Body": "The ticket reaches you via the provider — in-app or by email.",
+    "timelineStep4": "Funds released to seller",
+    "timelineStep4Body": "Only after you've confirmed receipt, the seller gets paid.",
+    "stateDone": "Done",
+    "stateCurrent": "In progress",
+    "stateUpcoming": "Upcoming"
   },
   "category": {
     "all": "All",
@@ -45,6 +74,17 @@
     "leaan": "Le'an",
     "eventim": "Eventim",
     "hadran": "Hadran"
+  },
+  "nav": {
+    "browse": "Browse tickets",
+    "howItWorks": "How it works",
+    "faq": "FAQ",
+    "login": "Log in",
+    "signup": "Sign up",
+    "sell": "List a ticket",
+    "searchAria": "Open search",
+    "menuAria": "Menu",
+    "languageToggleAria": "Switch language"
   },
   "home": {
     "heroTitle": "Verified tickets. Face value. Zero worries.",
@@ -82,7 +122,8 @@
     "contact": "Contact",
     "terms": "Terms",
     "privacy": "Privacy",
-    "copyright": "© 2026 Safe Ticket"
+    "copyright": "© 2026 Safe Ticket",
+    "trustRow": "Verified · Face value · Official transfer · Escrow"
   },
   "search": {
     "title": "Search tickets",
@@ -116,6 +157,65 @@
     "lowestPrice": "Lowest price",
     "newest": "Recently listed"
   },
+  "howItWorks": {
+    "title": "How it works",
+    "intro": "Five steps. No surprises, no PDFs, no WhatsApp.",
+    "connectTitle": "Connect",
+    "connectBody": "The seller connects their provider account (Ticketmaster, Le'an, Eventim, Hadran) to Safe Ticket via OAuth. We see only the tickets — never credit or payment details.",
+    "verifyTitle": "Verify",
+    "verifyBody": "Before a ticket is listed, we pull it directly from the provider and confirm it's valid, at face value, and that the seller is the owner.",
+    "listTitle": "List",
+    "listBody": "The seller picks an event and a specific seat. The price is set from the provider's record — the seller cannot raise it by a single shekel.",
+    "transferTitle": "Transfer",
+    "transferBody": "Once the buyer pays, the ticket moves through the provider's system — straight to the buyer's account. No PDF, no photo, no emailed QR code.",
+    "payTitle": "Pay out",
+    "payBody": "Funds stay in escrow until the buyer confirms the ticket landed in their provider account. Only then is the seller paid.",
+    "cta": "Browse tickets",
+    "refundTitle": "What about cancellations and refunds?",
+    "refundBody": "Once the official transfer is complete, the ticket belongs to the buyer for every purpose — cancellations, refunds, and reschedules are handled directly by the original ticket provider, not through Safe Ticket."
+  },
+  "faq": {
+    "title": "Frequently asked",
+    "intro": "The things people ask us most often. Can't find your answer? Get in touch.",
+    "q1": "How do I know the ticket is real?",
+    "a1": "Every ticket listed on Safe Ticket is pulled directly from the official provider's system (Ticketmaster, Le'an, Eventim, or Hadran) before it appears in search. We don't accept PDF uploads or photos — only tickets verified through the provider's system.",
+    "q2": "Why can't the seller charge more than face value?",
+    "a2": "That's the whole point of Safe Ticket. We connect sellers who can't make an event with buyers who want to — not scalpers. Prices are locked to the provider's original face value, and sellers can't change them.",
+    "q3": "When does my money get released to the seller?",
+    "a3": "Funds sit in an escrow account from the moment of payment until you confirm the ticket has landed in your provider account. Only then does the seller get paid. If anything goes wrong, your money comes back.",
+    "q4": "What if the transfer from the provider fails?",
+    "a4": "If the transfer can't complete on time for any reason (say, a provider outage), the sale is automatically cancelled and you get a full refund. You won't be left paid up with no ticket.",
+    "q5": "Does Safe Ticket refund cancelled events?",
+    "a5": "If an event is cancelled outright, the official provider handles the refund on their own policy. Once the transfer is complete, Safe Ticket no longer holds the money — refunds come from the provider, not us.",
+    "q6": "What if the event is rescheduled?",
+    "a6": "If an event is rescheduled, the ticket is valid for the new date (standard Israeli practice). If you can't make the new date, you can relist the ticket on Safe Ticket and resell it at face value.",
+    "q7": "How much does the service cost?",
+    "a7": "Buyers pay a small service fee (typically 5–8% of face value), always shown separately from the ticket price. Sellers pay a similar fee against what they receive. We always split the fee out — there's no markup or hidden cost.",
+    "q8": "Which providers are supported?",
+    "a8": "Today: Ticketmaster Israel, Le'an, Eventim, and Hadran — the four largest providers in the Israeli market. We add more as we complete secure integrations.",
+    "q9": "Is my information private?",
+    "a9": "We collect the minimum needed to run the service — name, email, phone, and payment method. We don't get access to your full ticket wallet at the provider, only the specific ticket listed. The full privacy policy is on its dedicated page.",
+    "q10": "Do tickets transfer across countries?",
+    "a10": "Safe Ticket focuses on the Israeli market — events take place in Israel and transfers happen within Israeli provider accounts. Buyers abroad can purchase if they hold a valid Israeli provider account."
+  },
+  "auth": {
+    "loginTitle": "Log in or sign up",
+    "loginSubtitle": "Log in with email and phone. Tickets are waiting.",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "phone": "Mobile phone",
+    "phonePlaceholder": "050-0000000",
+    "continueCta": "Continue",
+    "googleCta": "Continue with Google",
+    "appleCta": "Continue with Apple",
+    "socialDisabled": "Quick sign-in options will be enabled at public launch.",
+    "termsAgree": "By continuing you agree to the Terms of Service and Privacy Policy.",
+    "trustCopy": "Safe Ticket uses two-factor authentication and escrow on every purchase. Your data is private and never sold."
+  },
+  "toast": {
+    "notYetAvailable": "Not yet available — we're working on it.",
+    "buyComingSoon": "Checkout will be available at public launch."
+  },
   "styleGuide": {
     "title": "Design System",
     "intro": "Internal page — every primitive and component in every state.",
@@ -125,6 +225,9 @@
     "inputs": "Inputs",
     "badges": "Badges",
     "cards": "Cards",
+    "accordion": "Accordion",
+    "toast": "Toasts",
+    "timeline": "Timeline",
     "ticketComponents": "Ticket components",
     "primitives": "Primitives"
   }
