@@ -8,9 +8,10 @@ import { Input } from "@/components/ui/Input";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 // The homepage is the narrative: hero → trust pillars → how it works →
-// footer. Every section restates the product's core promise (verified,
-// face value, official transfer, escrow) — that repetition is load-bearing
-// per CLAUDE.md rules, not fluff. Copy is Hebrew-first through useLanguage.
+// refund note. Every section restates the product's core promise (verified,
+// face value, official transfer, escrow) — the repetition is load-bearing
+// per CLAUDE.md rules, not fluff. Global header + footer live in
+// layout.tsx; this file owns only the page content.
 
 export default function Home() {
   const router = useRouter();
@@ -24,46 +25,11 @@ export default function Home() {
 
   return (
     <>
-      <HomeHeader />
-      <main className="flex flex-1 flex-col">
-        <Hero query={query} setQuery={setQuery} onSubmit={onSearch} />
-        <TrustPillars />
-        <HowItWorks />
-        <RefundNote />
-      </main>
-      <HomeFooter />
+      <Hero query={query} setQuery={setQuery} onSubmit={onSearch} />
+      <TrustPillars />
+      <HowItWorks />
+      <RefundNote />
     </>
-  );
-}
-
-function HomeHeader() {
-  const { t, language, setLanguage } = useLanguage();
-  return (
-    <header className="border-b border-navy-100 bg-surface">
-      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-6 py-4">
-        <Link href="/" className="font-display text-h3 font-bold text-navy-900">
-          {t("common.appName")}
-        </Link>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setLanguage(language === "he" ? "en" : "he")}
-            className="text-small font-medium text-navy-700 hover:text-navy-900"
-          >
-            {language === "he" ? "EN" : "עברית"}
-          </button>
-          <Link
-            href="/search"
-            className="text-small font-medium text-navy-700 hover:text-navy-900"
-          >
-            {t("home.ctaBrowse")}
-          </Link>
-          <Button variant="trust" size="sm">
-            {t("common.list")}
-          </Button>
-        </div>
-      </div>
-    </header>
   );
 }
 
@@ -222,12 +188,18 @@ function HowItWorks() {
             </li>
           ))}
         </ol>
-        <div className="mt-10">
+        <div className="mt-10 flex flex-wrap gap-3">
           <Link
             href="/search"
             className="inline-flex h-12 items-center rounded-md bg-green-700 px-6 text-body font-medium text-white transition-colors hover:bg-green-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {t("home.ctaBrowse")} →
+          </Link>
+          <Link
+            href="/how-it-works"
+            className="inline-flex h-12 items-center rounded-md border border-white/30 px-6 text-body font-medium text-white transition-colors hover:bg-white/5"
+          >
+            {t("nav.howItWorks")}
           </Link>
         </div>
       </div>
@@ -243,68 +215,6 @@ function RefundNote() {
         <p className="text-small text-navy-500">{t("home.refundNote")}</p>
       </div>
     </section>
-  );
-}
-
-function HomeFooter() {
-  const { t } = useLanguage();
-  const columns: Array<{ title: string; links: Array<{ label: string; href: string }> }> = [
-    {
-      title: t("footer.product"),
-      links: [
-        { label: t("footer.browse"), href: "/search" },
-        { label: t("footer.sell"), href: "#" },
-        { label: t("footer.howItWorks"), href: "#" },
-      ],
-    },
-    {
-      title: t("footer.support"),
-      links: [
-        { label: t("footer.faq"), href: "#" },
-        { label: t("footer.contact"), href: "#" },
-      ],
-    },
-    {
-      title: t("footer.legal"),
-      links: [
-        { label: t("footer.terms"), href: "#" },
-        { label: t("footer.privacy"), href: "#" },
-      ],
-    },
-  ];
-  return (
-    <footer className="border-t border-navy-100 bg-surface py-10">
-      <div className="mx-auto grid w-full max-w-[1200px] gap-8 px-6 md:grid-cols-[2fr_1fr_1fr_1fr]">
-        <div className="flex flex-col gap-2">
-          <span className="font-display text-h3 font-bold text-navy-900">
-            {t("common.appName")}
-          </span>
-          <p className="text-small text-navy-600">{t("footer.tagline")}</p>
-        </div>
-        {columns.map((col) => (
-          <div key={col.title} className="flex flex-col gap-3">
-            <h4 className="text-small font-semibold text-navy-900">
-              {col.title}
-            </h4>
-            <ul className="flex flex-col gap-2">
-              {col.links.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-small text-navy-600 hover:text-navy-900"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-      <div className="mx-auto mt-10 w-full max-w-[1200px] border-t border-navy-100 px-6 pt-6">
-        <p className="text-caption text-navy-500">{t("footer.copyright")}</p>
-      </div>
-    </footer>
   );
 }
 

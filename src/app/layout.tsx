@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Rubik, Assistant } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
+import { ToastProvider } from "@/components/ui/Toast";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 // Rubik = display (headlines, prices, CTAs). Assistant = body (all other text).
 // Both are Hebrew-first typefaces; Latin-first fonts (Inter/Roboto) are forbidden
@@ -22,7 +25,10 @@ const assistant = Assistant({
 });
 
 export const metadata: Metadata = {
-  title: "Safe Ticket",
+  title: {
+    default: "Safe Ticket — כרטיסים מאומתים במחיר הנקוב",
+    template: "%s · Safe Ticket",
+  },
   description:
     "פלטפורמת מכירה חוזרת של כרטיסים מאומתים במחיר הנקוב בלבד. העברה רשמית, נאמנות, ללא הונאות.",
 };
@@ -32,8 +38,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Hebrew is the default. The language toggle (Sprint 1.3) updates <html>'s
-  // lang/dir via the LanguageProvider once it's user-switchable.
+  // Hebrew is the server-rendered default. The LanguageProvider updates
+  // <html> lang/dir client-side when the user toggles via the header or
+  // footer controls.
   return (
     <html
       lang="he"
@@ -41,7 +48,13 @@ export default function RootLayout({
       className={`${rubik.variable} ${assistant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LanguageProvider initialLanguage="he">{children}</LanguageProvider>
+        <LanguageProvider initialLanguage="he">
+          <ToastProvider>
+            <Header />
+            <div className="flex flex-1 flex-col">{children}</div>
+            <Footer />
+          </ToastProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
