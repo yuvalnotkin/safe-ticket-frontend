@@ -13,10 +13,11 @@ Only official transfer mechanisms supported. Escrow holds funds until transfer c
 - Deployed on Vercel (auto-deploy from main branch)
 
 ## Design Direction
+See `design_system.md` for the full design system (tokens, fonts, RTL rules, anti-patterns). Summary:
 - Brand: Dark navy (#1B2A4A), Trust green (#2D6A4F), Clean white (#FAFAFA)
+- Fonts: Rubik (display) + Assistant (body) — Hebrew-first. Never Inter, Roboto, Arial, or system-ui.
 - Tone: Premium, trustworthy, fintech-like — NOT a bazaar or generic marketplace
 - References: StubHub (search UX), Revolut (trust feel), Wolt (card design)
-- Font: Distinctive Hebrew-friendly pair — NOT Inter, NOT Roboto, NOT Arial
 - Mobile-first responsive. Hebrew primary, English toggle.
 - MUST look unique — avoid generic vibe-coded aesthetics
 
