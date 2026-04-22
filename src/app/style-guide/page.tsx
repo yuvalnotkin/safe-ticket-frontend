@@ -15,8 +15,10 @@ import type { Ticket } from "@/lib/types";
 // access via `/style-guide`. Also the place to verify RTL correctness
 // (toggle language top-right) before shipping any screen.
 
+// Reuse a real fixture id so clicking the sample card in the style guide
+// lands on the /tickets/[id] placeholder instead of 404-ing.
 const SAMPLE_TICKET: Ticket = {
-  id: "sample-1",
+  id: "t-001",
   event: {
     name: "מכבי תל אביב — הפועל באר שבע",
     date: "2026-05-18T20:15:00+03:00",
