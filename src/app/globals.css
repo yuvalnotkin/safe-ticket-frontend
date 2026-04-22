@@ -106,6 +106,18 @@
   --shadow-focus: 0 0 0 3px rgb(27 42 74 / 0.15);
 }
 
+/* Sheet enter animations (see components/ui/Sheet.tsx). Keyframes live at
+ * the stylesheet root because Tailwind v4 resolves @theme-scoped keyframes
+ * at build time but not arbitrary-variant animations. */
+@keyframes sheet-slide {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes sheet-scrim {
+  from { opacity: 0; }
+  to { opacity: 0.4; }
+}
+
 /* Remove Tailwind's default ring color fallback so focus rings pick up navy. */
 @layer base {
   html {

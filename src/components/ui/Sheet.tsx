@@ -1,13 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import { cn } from "@/lib/utils";
 
-// Mobile bottom-sheet. Slides up from the bottom of the viewport, fills most
-// of the screen, dims the page behind it. Used for the filter panel on small
-// screens (design_system.md spec: "slide-out or bottom sheet, not a cramped
-// sidebar"). Keep non-modal styling simple; no focus-trap library in Phase 1
-// — we rely on <dialog>-like behavior via Escape to close.
+// Mobile bottom-sheet. Slides up from the bottom of the viewport, fills up
+// to 85vh, dims the page behind it. Used for the filter panel on /search
+// and the mobile nav menu in the global Header (design_system.md: "slide-out
+// or bottom sheet, not a cramped sidebar").
+//
+// The whole subtree is rendered only when `open=true`. That sidesteps a
+// subtle interaction bug where a "closed" Sheet still covered the viewport
+// with a pointer-events-auto child (pointer-events-none on the parent does
+// not propagate to children) — the invisible scrim silently blocked clicks
+// on every other page element. Conditional render = no subtree, no leak.
 
 export type SheetProps = {
   open: boolean;
@@ -18,8 +22,8 @@ export type SheetProps = {
 };
 
 export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
-  // Escape closes the sheet. Body scroll lock prevents the background from
-  // scrolling under the sheet on iOS Safari.
+  // Escape closes the sheet; body scroll lock prevents iOS Safari from
+  // scrolling the page behind the sheet. Both only attach when open.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -34,30 +38,19 @@ export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
     };
   }, [open, onClose]);
 
+  if (!open) return null;
+
   return (
-    <div
-      aria-hidden={!open}
-      className={cn(
-        "fixed inset-0 z-50",
-        open ? "pointer-events-auto" : "pointer-events-none",
-      )}
-    >
+    <div className="fixed inset-0 z-50">
       <div
         onClick={onClose}
-        className={cn(
-          "absolute inset-0 bg-navy-950 transition-opacity duration-200",
-          open ? "opacity-40" : "opacity-0",
-        )}
+        className="absolute inset-0 bg-navy-950 opacity-40 animate-[sheet-scrim_200ms_ease-out]"
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={cn(
-          "absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col rounded-t-xl bg-surface shadow-lg",
-          "transition-transform duration-200",
-          open ? "translate-y-0" : "translate-y-full",
-        )}
+        className="absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col rounded-t-xl bg-surface shadow-lg animate-[sheet-slide_220ms_ease-out]"
       >
         <div className="flex items-center justify-between border-b border-navy-100 px-5 py-4">
           {title && <h2 className="text-h3 text-navy-900">{title}</h2>}
