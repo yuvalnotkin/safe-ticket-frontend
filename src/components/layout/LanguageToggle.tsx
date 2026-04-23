@@ -3,8 +3,8 @@
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
-// HE ⇄ EN toggle. Plain button on compact surfaces (header), a proper
-// segmented control for the footer's roomier spot.
+// HE ⇄ EN. Plain text toggle for the header (subtle), segmented control
+// for the footer (more visible in the roomier spot).
 
 export function LanguageToggle({ className }: { className?: string }) {
   const { language, setLanguage, t } = useLanguage();
@@ -14,8 +14,8 @@ export function LanguageToggle({ className }: { className?: string }) {
       onClick={() => setLanguage(language === "he" ? "en" : "he")}
       aria-label={t("nav.languageToggleAria")}
       className={cn(
-        "text-small font-semibold text-navy-700 transition-colors hover:text-navy-900",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900",
+        "text-caption font-medium text-ink-2 transition-colors hover:text-ink",
+        "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30 rounded",
         className,
       )}
     >
@@ -33,10 +33,10 @@ export function LanguageToggleSegmented({ className }: { className?: string }) {
       onClick={() => setLanguage(v)}
       aria-pressed={language === v}
       className={cn(
-        "px-3 py-1.5 text-small font-medium transition-colors",
+        "px-3 py-1.5 text-caption font-medium transition-colors",
         language === v
-          ? "bg-navy-900 text-white"
-          : "text-navy-700 hover:text-navy-900",
+          ? "bg-cream text-forest-900"
+          : "text-cream/70 hover:text-cream",
       )}
     >
       {label}
@@ -45,7 +45,7 @@ export function LanguageToggleSegmented({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex overflow-hidden rounded-md border border-navy-200",
+        "inline-flex overflow-hidden rounded-md border border-border-on-dark",
         className,
       )}
     >

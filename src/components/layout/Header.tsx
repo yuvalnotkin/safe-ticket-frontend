@@ -2,26 +2,26 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Sheet } from "@/components/ui/Sheet";
 import { LanguageToggle } from "./LanguageToggle";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
-// Global site header. Sticky on scroll. Desktop shows nav inline; mobile
-// collapses it into a sheet (the same Sheet component used on /search).
-// "search" on desktop is a full input stub that navigates on submit;
-// on mobile it's a magnifier icon that routes to /search.
+// Sticky translucent top nav — matches the Cloverly reference:
+// `backdrop-filter: blur(12px); background: rgba(244,239,230,0.78)`.
+// Mobile collapses nav + Login into a Sheet triggered by the hamburger.
+// The Sell CTA gets the ochre reserve treatment (design_system.md §2).
 
 export function Header() {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Force-close the mobile nav when the viewport is ≥md (768px). The
-  // hamburger trigger is `md:hidden`, so once the menu is open and the
-  // user resizes up — or HMR / back-forward cache preserves menuOpen=true
-  // across a viewport-size change — there'd otherwise be no way to close
-  // it. Initial check is deferred via setTimeout so setState isn't called
-  // synchronously inside the effect body (React 19 lint rule).
+  // Close the mobile nav when the viewport crosses up to md (768px+).
+  // The hamburger trigger is `md:hidden`, so once the menu is open and the
+  // user resizes up — or HMR / back-forward cache preserves menuOpen=true —
+  // there'd otherwise be no visible control to close it. Initial check is
+  // deferred to avoid sync setState inside the effect body.
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const close = () => setMenuOpen(false);
@@ -43,50 +43,56 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-navy-100 bg-surface/95 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-[1200px] items-center gap-4 px-4 py-3 md:gap-6 md:px-6">
+    <header className="sticky top-0 z-40 border-b border-border bg-cream/78 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1200px] items-center gap-6 px-4 py-4 md:px-12">
         <Link
           href="/"
-          className="font-display text-h3 font-bold text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"
+          className="flex items-center focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30 rounded"
+          aria-label={t("common.appName")}
         >
-          {t("common.appName")}
+          <Image
+            src="/brand/logo.svg"
+            alt={t("common.appName")}
+            width={130}
+            height={28}
+            priority
+            className="h-7 w-auto"
+          />
         </Link>
 
-        <nav className="hidden flex-1 items-center gap-5 md:flex">
+        <nav className="hidden flex-1 items-center gap-7 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-small font-medium text-navy-700 transition-colors hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"
+              className="link-underline text-small font-medium text-ink transition-colors hover:text-ink-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30 rounded"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Desktop actions */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="ms-auto hidden items-center gap-4 md:flex">
           <Link
             href="/login"
-            className="text-small font-medium text-navy-700 hover:text-navy-900"
+            className="text-small font-medium text-ink-2 hover:text-ink"
           >
             {t("nav.login")}
           </Link>
           <LanguageToggle />
           <Link
             href="/login"
-            className="inline-flex h-9 items-center rounded-md bg-green-700 px-4 text-small font-medium text-white transition-colors hover:bg-green-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"
+            className="inline-flex h-10 items-center rounded-md bg-ochre px-5 text-small font-medium text-white transition-colors hover:bg-ochre-deep focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
           >
             {t("nav.sell")}
           </Link>
         </div>
 
-        {/* Mobile actions */}
         <div className="ms-auto flex items-center gap-2 md:hidden">
           <Link
             href="/search"
             aria-label={t("nav.searchAria")}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-navy-700 hover:bg-navy-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-ink hover:bg-bone focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
           >
             <SearchIcon />
           </Link>
@@ -95,7 +101,7 @@ export function Header() {
             type="button"
             aria-label={t("nav.menuAria")}
             onClick={() => setMenuOpen(true)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-navy-700 hover:bg-navy-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-ink hover:bg-bone focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
           >
             <MenuIcon />
           </button>
@@ -113,7 +119,7 @@ export function Header() {
               key={link.href}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="rounded-md px-3 py-3 text-body-lg font-medium text-navy-900 hover:bg-navy-50"
+              className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink hover:bg-cream"
             >
               {link.label}
             </Link>
@@ -121,7 +127,7 @@ export function Header() {
           <Link
             href="/login"
             onClick={() => setMenuOpen(false)}
-            className="rounded-md px-3 py-3 text-body-lg font-medium text-navy-900 hover:bg-navy-50"
+            className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink hover:bg-cream"
           >
             {t("nav.login")}
           </Link>
@@ -130,7 +136,7 @@ export function Header() {
             onClick={() => setMenuOpen(false)}
             className={cn(
               "mt-4 inline-flex h-12 items-center justify-center rounded-md",
-              "bg-green-700 text-body font-medium text-white transition-colors hover:bg-green-800",
+              "bg-ochre text-body font-medium text-white transition-colors hover:bg-ochre-deep",
             )}
           >
             {t("nav.sell")}
@@ -144,11 +150,11 @@ export function Header() {
 function SearchIcon() {
   return (
     <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none">
-      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5" />
       <path
         d="m14 14 4 4"
         stroke="currentColor"
-        strokeWidth="1.75"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
     </svg>
@@ -161,7 +167,7 @@ function MenuIcon() {
       <path
         d="M3 6h14M3 10h14M3 14h14"
         stroke="currentColor"
-        strokeWidth="1.75"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
     </svg>
