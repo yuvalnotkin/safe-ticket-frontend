@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
-// Mobile bottom-sheet. Slides up from the bottom, fills up to 85vh, dims
+// Mobile bottom-sheet. Slides up from the bottom, fills up to 85dvh, dims
 // the page behind it. Conditionally rendered (return null when !open) so
 // there's no invisible scrim over the page when closed.
+//
+// Rendered via a portal into document.body. Without this, the Sheet sits
+// inside whatever component invoked it — and an ancestor with
+// `backdrop-filter` (the sticky Header uses `backdrop-blur-md`) creates
+// a containing block for fixed-positioned descendants. That anchors
+// `fixed inset-0` to the Header's box instead of the viewport, pushing
+// most of the Sheet off-screen above. The portal escapes that.
 
 export type SheetProps = {
   open: boolean;
@@ -15,6 +23,16 @@ export type SheetProps = {
 };
 
 export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
+  // Portal target has to exist before we can render into it; gate on mount
+  // so SSR and the first client paint match (both render nothing). setState
+  // is deferred via setTimeout to avoid the React 19 sync-setState-in-effect
+  // lint rule.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), 0);
+    return () => window.clearTimeout(id);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -29,9 +47,9 @@ export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50">
       <div
         onClick={onClose}
@@ -41,7 +59,7 @@ export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col rounded-t-xl bg-bone shadow-lg animate-[sheet-slide_240ms_cubic-bezier(0.22,1,0.36,1)]"
+        className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-xl bg-bone shadow-lg animate-[sheet-slide_240ms_cubic-bezier(0.22,1,0.36,1)]"
       >
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           {title && <h2 className="font-display text-h3 text-ink">{title}</h2>}
@@ -68,6 +86,7 @@ export function Sheet({ open, onClose, title, children, footer }: SheetProps) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
