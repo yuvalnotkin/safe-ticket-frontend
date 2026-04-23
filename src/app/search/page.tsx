@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import { Badge } from "@/components/ui/Badge";
 import { Sheet } from "@/components/ui/Sheet";
 import { TicketCard } from "@/components/ticket/TicketCard";
 import { TicketCardSkeleton } from "@/components/search/TicketCardSkeleton";
@@ -23,16 +22,10 @@ import {
   type SortKey,
 } from "@/lib/search";
 
-// Owns all search state. Filters + sort + query combine into the final
-// result list; filters are debounced via the query only (typing noise is
-// the cost; toggling a checkbox is a deliberate action and runs immediately).
-
 const INITIAL_LOAD_MS = 300;
 
-// useSearchParams() reads the URL but requires a Suspense boundary in
-// Next.js App Router, so the page is a Suspense wrapper around the real
-// content. The fallback matches the skeleton state of the inner page so
-// navigation feels uninterrupted.
+// useSearchParams() reads the URL but requires a Suspense boundary in the
+// App Router; the page is a Suspense wrapper around the real content.
 export default function SearchPage() {
   return (
     <Suspense fallback={<SearchPageFallback />}>
@@ -50,18 +43,13 @@ function SearchPageInner() {
   const [sort, setSort] = useState<SortKey>("soonest");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  // Simulate an initial fetch so the skeleton state is actually reachable.
-  // Phase 2 swaps this for a real pending-query state.
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const id = window.setTimeout(() => setIsLoading(false), INITIAL_LOAD_MS);
     return () => window.clearTimeout(id);
   }, []);
 
-  // Same rationale as the Header's md watcher: the mobile filters button is
-  // `md:hidden`, so once the sheet is open on mobile and the user resizes
-  // to desktop, there'd otherwise be no trigger to close it. Initial check
-  // is deferred to avoid sync setState inside the effect body.
+  // Close mobile filters when viewport crosses up to md.
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const close = () => setMobileFiltersOpen(false);
@@ -102,9 +90,11 @@ function SearchPageInner() {
   ];
 
   return (
-    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 py-6 md:px-6 md:py-10">
-      <header className="flex flex-col gap-3">
-        <h1 className="text-h1 font-bold text-navy-900">{t("search.title")}</h1>
+    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-6 py-10 md:px-12 md:py-14">
+      <header className="flex flex-col gap-5">
+        <h1 className="font-display text-display-md font-medium text-ink">
+          {t("search.title")}
+        </h1>
         <Input
           type="search"
           placeholder={t("search.placeholder")}
@@ -115,11 +105,7 @@ function SearchPageInner() {
       </header>
 
       <div className="flex items-center justify-between gap-3">
-        <ResultsLine
-          loading={isLoading}
-          count={results.length}
-          hasAnyFilter={hasAnyFilter}
-        />
+        <ResultsLine loading={isLoading} count={results.length} />
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
@@ -130,12 +116,12 @@ function SearchPageInner() {
           >
             {t("search.openFiltersMobile")}
             {activeCount > 0 && (
-              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-pill bg-navy-900 px-1.5 text-caption font-semibold text-white">
+              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-pill bg-ochre px-1.5 text-micro font-semibold text-white">
                 {activeCount}
               </span>
             )}
           </Button>
-          <div className="w-44">
+          <div className="w-48">
             <Select
               aria-label={t("sort.label")}
               value={sort}
@@ -146,10 +132,10 @@ function SearchPageInner() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-[260px_1fr]">
+      <div className="grid gap-8 md:grid-cols-[260px_1fr] md:gap-10">
         <aside className="hidden md:block">
-          <div className="sticky top-6 rounded-lg border border-navy-100 bg-surface p-5">
-            <h2 className="mb-4 text-h3 font-semibold text-navy-900">
+          <div className="sticky top-24 rounded-lg border border-border bg-bone p-6">
+            <h2 className="mb-5 font-display text-h3 font-medium text-ink">
               {t("filters.title")}
             </h2>
             <FilterPanel
@@ -160,7 +146,7 @@ function SearchPageInner() {
           </div>
         </aside>
 
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-6">
           {isLoading ? (
             <SkeletonGrid />
           ) : results.length === 0 ? (
@@ -170,7 +156,7 @@ function SearchPageInner() {
               <EmptyQueryState />
             )
           ) : (
-            <div className="flex flex-col gap-4">
+            <div className="grid gap-6 sm:grid-cols-2">
               {results.map((ticket) => (
                 <TicketCard key={ticket.id} ticket={ticket} />
               ))}
@@ -214,34 +200,23 @@ function SearchPageInner() {
 function ResultsLine({
   loading,
   count,
-  hasAnyFilter,
 }: {
   loading: boolean;
   count: number;
-  hasAnyFilter: boolean;
 }) {
   const { t } = useLanguage();
-  if (loading) return <p className="text-small text-navy-500">{t("common.loading")}</p>;
-
-  if (count === 0 && !hasAnyFilter) {
-    return (
-      <div className="flex items-center gap-2">
-        <Badge tone="neutral">{MOCK_TICKETS.length}</Badge>
-        <span className="text-small text-navy-600">{t("search.title")}</span>
-      </div>
-    );
-  }
+  if (loading) return <p className="text-caption text-ink-3">{t("common.loading")}</p>;
 
   const label =
     count === 1
       ? t("search.singleResult")
       : t("search.resultsCount").replace("{count}", String(count));
-  return <p className="text-small text-navy-700">{label}</p>;
+  return <p className="text-caption font-medium text-ink-2">{label}</p>;
 }
 
 function SkeletonGrid() {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="grid gap-6 sm:grid-cols-2">
       {Array.from({ length: 4 }).map((_, i) => (
         <TicketCardSkeleton key={i} />
       ))}
@@ -251,7 +226,7 @@ function SkeletonGrid() {
 
 function SearchPageFallback() {
   return (
-    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 py-6 md:px-6 md:py-10">
+    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 py-10 md:px-12 md:py-14">
       <SkeletonGrid />
     </main>
   );
@@ -260,10 +235,12 @@ function SearchPageFallback() {
 function EmptyQueryState() {
   const { t } = useLanguage();
   return (
-    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-navy-200 bg-surface p-10 text-center">
-      <SearchIcon className="h-8 w-8 text-navy-300" />
-      <h2 className="text-h3 text-navy-900">{t("search.emptyQueryTitle")}</h2>
-      <p className="max-w-md text-body text-navy-600">
+    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border-strong bg-bone p-12 text-center">
+      <SearchIcon className="h-8 w-8 text-ink-3" />
+      <h2 className="font-display text-h2 font-medium text-ink">
+        {t("search.emptyQueryTitle")}
+      </h2>
+      <p className="max-w-md text-body text-ink-2">
         {t("search.emptyQueryBody")}
       </p>
     </div>
@@ -273,9 +250,11 @@ function EmptyQueryState() {
 function NoResultsState({ onReset }: { onReset: () => void }) {
   const { t } = useLanguage();
   return (
-    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-navy-200 bg-surface p-10 text-center">
-      <h2 className="text-h3 text-navy-900">{t("search.noResultsTitle")}</h2>
-      <p className="max-w-md text-body text-navy-600">
+    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border-strong bg-bone p-12 text-center">
+      <h2 className="font-display text-h2 font-medium text-ink">
+        {t("search.noResultsTitle")}
+      </h2>
+      <p className="max-w-md text-body text-ink-2">
         {t("search.noResultsBody")}
       </p>
       <Button variant="secondary" onClick={onReset}>
@@ -293,11 +272,11 @@ function SearchIcon({ className }: { className?: string }) {
       fill="none"
       aria-hidden="true"
     >
-      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.75" />
+      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5" />
       <path
         d="m14 14 4 4"
         stroke="currentColor"
-        strokeWidth="1.75"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
     </svg>
@@ -316,7 +295,7 @@ function FiltersIcon() {
       <path
         d="M3 5h14M6 10h8M9 15h2"
         stroke="currentColor"
-        strokeWidth="1.75"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
     </svg>

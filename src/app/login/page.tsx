@@ -6,9 +6,8 @@ import { Input } from "@/components/ui/Input";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useToast } from "@/components/ui/Toast";
 
-// UI-only. No real auth — submit shows a toast explaining the feature is
-// not yet available. Social buttons are rendered disabled with a small
-// "enabled at launch" note underneath.
+// UI-only. Submit fires a "not yet available" toast; social buttons are
+// disabled until public launch. Centered card on the cream surface.
 
 export default function LoginPage() {
   const { t } = useLanguage();
@@ -23,16 +22,14 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="flex flex-1 items-center justify-center bg-navy-50 px-6 py-16 md:py-20">
-      <div className="w-full max-w-md rounded-lg border border-navy-100 bg-surface p-8 shadow-md">
-        <h1 className="font-display text-h1 font-bold text-navy-900">
+    <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
+      <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10">
+        <h1 className="font-display text-h1 font-medium leading-tight text-ink">
           {t("auth.loginTitle")}
         </h1>
-        <p className="mt-2 text-body text-navy-700">
-          {t("auth.loginSubtitle")}
-        </p>
+        <p className="mt-3 text-body text-ink-2">{t("auth.loginSubtitle")}</p>
 
-        <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
+        <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">
           <Input
             type="email"
             label={t("auth.email")}
@@ -51,18 +48,18 @@ export default function LoginPage() {
             autoComplete="tel"
             required
           />
-          <Button type="submit" size="lg">
+          <Button type="submit" variant="cta" size="lg">
             {t("auth.continueCta")}
           </Button>
-          <p className="text-caption text-navy-500">{t("auth.termsAgree")}</p>
+          <p className="text-caption text-ink-3">{t("auth.termsAgree")}</p>
         </form>
 
-        <div className="my-6 flex items-center gap-3">
-          <span className="h-px flex-1 bg-navy-100" />
-          <span className="text-caption uppercase tracking-wide text-navy-400">
+        <div className="my-8 flex items-center gap-3">
+          <span className="h-px flex-1 bg-border" />
+          <span className="text-micro uppercase tracking-[0.12em] text-ink-3">
             {t("common.or")}
           </span>
-          <span className="h-px flex-1 bg-navy-100" />
+          <span className="h-px flex-1 bg-border" />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -72,13 +69,11 @@ export default function LoginPage() {
           <Button variant="secondary" size="md" disabled leadingIcon={<AppleIcon />}>
             {t("auth.appleCta")}
           </Button>
-          <p className="text-caption text-navy-500">
-            {t("auth.socialDisabled")}
-          </p>
+          <p className="text-caption text-ink-3">{t("auth.socialDisabled")}</p>
         </div>
 
-        <div className="mt-6 rounded-md border border-green-200 bg-green-50 p-4">
-          <p className="text-small text-green-900">{t("auth.trustCopy")}</p>
+        <div className="mt-8 rounded-md border border-sage/30 bg-success-bg p-4">
+          <p className="text-small text-forest-900">{t("auth.trustCopy")}</p>
         </div>
       </div>
     </section>

@@ -13,13 +13,6 @@ import { TransactionTimeline } from "@/components/ticket/TransactionTimeline";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Ticket } from "@/lib/types";
 
-// Internal self-documenting spec for the design system. Every primitive and
-// component appears in every meaningful state. Not linked from main nav —
-// access via `/style-guide`. Also the place to verify RTL correctness
-// (toggle language top-right) before shipping any screen.
-
-// Reuse a real fixture id so clicking the sample card in the style guide
-// lands on the /tickets/[id] placeholder instead of 404-ing.
 const SAMPLE_TICKET: Ticket = {
   id: "t-001",
   event: {
@@ -38,10 +31,10 @@ export default function StyleGuidePage() {
   const { t, language, setLanguage } = useLanguage();
 
   return (
-    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 px-6 py-12">
-      <header className="flex flex-col gap-3 border-b border-navy-100 pb-6">
+    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-16 px-6 py-12 md:px-12">
+      <header className="flex flex-col gap-4 border-b border-border pb-8">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="font-display text-display text-navy-900">
+          <h1 className="font-display text-display-lg font-medium text-ink">
             {t("styleGuide.title")}
           </h1>
           <div className="flex gap-2">
@@ -61,7 +54,7 @@ export default function StyleGuidePage() {
             </Button>
           </div>
         </div>
-        <p className="text-body text-navy-600">{t("styleGuide.intro")}</p>
+        <p className="text-body-lg text-ink-2">{t("styleGuide.intro")}</p>
       </header>
 
       <Section title={t("styleGuide.colors")}>
@@ -69,35 +62,41 @@ export default function StyleGuidePage() {
       </Section>
 
       <Section title={t("styleGuide.typography")}>
-        <div className="flex flex-col gap-3">
-          <p className="font-display text-display">Display · 40px / 700</p>
-          <p className="text-h1">H1 · 32px / 700</p>
-          <p className="text-h2">H2 · 24px / 600</p>
-          <p className="text-h3">H3 · 20px / 600</p>
-          <p className="text-body-lg">Body LG · 18px / 1.6</p>
-          <p className="text-body">Body · 16px / 1.5</p>
-          <p className="text-small">Small · 14px</p>
-          <p className="text-caption text-navy-500">Caption · 12px · muted</p>
+        <div className="flex flex-col gap-4">
+          <p className="font-display text-display-xl">Display XL · 80px</p>
+          <p className="font-display text-display-lg">Display LG · 64px</p>
+          <p className="font-display text-display-md">Display MD · 48px</p>
+          <p className="font-display text-h1">H1 · 40px</p>
+          <p className="font-display text-h2">H2 · 32px</p>
+          <p className="font-display text-h3">H3 · 24px</p>
+          <p className="text-h4 font-semibold">H4 sans · 20px</p>
+          <p className="text-body-lg">Body large · 18px / 1.6</p>
+          <p className="text-body">Body · 16px / 1.6</p>
+          <p className="text-small text-ink-2">Small · 14px</p>
+          <p className="text-caption text-ink-3">Caption · 13px</p>
+          <p className="text-micro uppercase tracking-[0.12em] text-ink-3">
+            Micro / eyebrow · 12px
+          </p>
         </div>
       </Section>
 
       <Section title={t("styleGuide.buttons")}>
         <Grid>
-          <StateGroup label="Primary (navy)">
+          <StateGroup label="Primary (forest)">
             <Button size="sm">Small</Button>
             <Button size="md">Medium</Button>
             <Button size="lg">Large</Button>
             <Button disabled>Disabled</Button>
             <Button loading>Loading</Button>
           </StateGroup>
-          <StateGroup label="Trust (green) — buy / list only">
-            <Button variant="trust" size="sm">{t("common.buy")}</Button>
-            <Button variant="trust">{t("common.buy")}</Button>
-            <Button variant="trust" size="lg">{t("common.list")}</Button>
-            <Button variant="trust" disabled>Disabled</Button>
-            <Button variant="trust" loading>Loading</Button>
+          <StateGroup label="CTA (ochre) — buy / list only">
+            <Button variant="cta" size="sm">{t("common.buy")}</Button>
+            <Button variant="cta">{t("common.buy")}</Button>
+            <Button variant="cta" size="lg">{t("common.list")}</Button>
+            <Button variant="cta" disabled>Disabled</Button>
+            <Button variant="cta" loading>Loading</Button>
           </StateGroup>
-          <StateGroup label="Secondary (outlined)">
+          <StateGroup label="Secondary (outlined forest)">
             <Button variant="secondary" size="sm">Small</Button>
             <Button variant="secondary">Medium</Button>
             <Button variant="secondary" size="lg">Large</Button>
@@ -114,10 +113,7 @@ export default function StyleGuidePage() {
 
       <Section title={t("styleGuide.inputs")}>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <Input
-            label={t("common.search")}
-            placeholder={t("common.search")}
-          />
+          <Input label={t("common.search")} placeholder={t("common.search")} />
           <Input
             label={t("common.search")}
             placeholder={t("common.search")}
@@ -141,35 +137,41 @@ export default function StyleGuidePage() {
       <Section title={t("styleGuide.badges")}>
         <div className="flex flex-wrap gap-3">
           <Badge tone="neutral">Neutral</Badge>
-          <Badge tone="trust">{t("trust.verified")}</Badge>
+          <Badge tone="verified">{t("trust.verified")}</Badge>
+          <Badge tone="face-value">{t("price.faceValue")}</Badge>
           <Badge tone="success">Success</Badge>
           <Badge tone="warning">Warning</Badge>
           <Badge tone="danger">Danger</Badge>
+          <Badge tone="info" mono>Ticketmaster</Badge>
           <VerificationBadge />
         </div>
       </Section>
 
       <Section title={t("styleGuide.cards")}>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Card className="p-5">
-            <h3 className="text-h3 text-navy-900">Default card</h3>
-            <p className="mt-2 text-body text-navy-600">
-              White surface, thin border, subtle shadow.
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <Card className="p-6">
+            <h3 className="font-display text-h3 font-medium text-ink">
+              Default card
+            </h3>
+            <p className="mt-2 text-body text-ink-2">
+              Bone surface, 1px warm-grey border, forest-tinted shadow.
             </p>
           </Card>
-          <Card interactive className="p-5">
-            <h3 className="text-h3 text-navy-900">Interactive card</h3>
-            <p className="mt-2 text-body text-navy-600">
-              Hover lift — used for clickable summaries like TicketCard.
+          <Card interactive className="p-6">
+            <h3 className="font-display text-h3 font-medium text-ink">
+              Interactive card
+            </h3>
+            <p className="mt-2 text-body text-ink-2">
+              Hover: border steps to forest, 2px lift, deeper shadow.
             </p>
           </Card>
         </div>
       </Section>
 
       <Section title={t("styleGuide.ticketComponents")}>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
           <StateGroup label="PriceBreakdown — compact">
-            <div className="rounded-md bg-surface p-4">
+            <div className="rounded-md border border-border bg-bone p-5">
               <PriceBreakdown
                 faceValue={240}
                 serviceFee={18}
@@ -183,7 +185,9 @@ export default function StyleGuidePage() {
             </div>
           </StateGroup>
           <StateGroup label="TicketCard">
-            <TicketCard ticket={SAMPLE_TICKET} />
+            <div className="max-w-md">
+              <TicketCard ticket={SAMPLE_TICKET} />
+            </div>
           </StateGroup>
         </div>
       </Section>
@@ -191,17 +195,17 @@ export default function StyleGuidePage() {
       <Section title={t("styleGuide.timeline")}>
         <div className="grid gap-6 md:grid-cols-3">
           <StateGroup label="All upcoming">
-            <div className="w-full rounded-md border border-navy-100 bg-surface p-5">
+            <div className="w-full rounded-md border border-border bg-bone p-5">
               <TransactionTimeline currentStep={-1} />
             </div>
           </StateGroup>
           <StateGroup label="Mid-flow (step 2 active)">
-            <div className="w-full rounded-md border border-navy-100 bg-surface p-5">
+            <div className="w-full rounded-md border border-border bg-bone p-5">
               <TransactionTimeline currentStep={1} />
             </div>
           </StateGroup>
           <StateGroup label="Completed">
-            <div className="w-full rounded-md border border-navy-100 bg-surface p-5">
+            <div className="w-full rounded-md border border-border bg-bone p-5">
               <TransactionTimeline currentStep={4} />
             </div>
           </StateGroup>
@@ -211,10 +215,7 @@ export default function StyleGuidePage() {
       <Section title={t("styleGuide.accordion")}>
         <div className="max-w-2xl">
           <Accordion>
-            <AccordionItem
-              question={t("faq.q1")}
-              defaultOpen
-            >
+            <AccordionItem question={t("faq.q1")} defaultOpen>
               {t("faq.a1")}
             </AccordionItem>
             <AccordionItem question={t("faq.q2")}>{t("faq.a2")}</AccordionItem>
@@ -271,8 +272,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col gap-5">
-      <h2 className="text-h2 text-navy-900">{title}</h2>
+    <section className="flex flex-col gap-6">
+      <h2 className="font-display text-h2 font-medium text-ink">{title}</h2>
       {children}
     </section>
   );
@@ -287,7 +288,7 @@ function StateGroup({
 }) {
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-caption font-medium uppercase tracking-wide text-navy-500">
+      <p className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
         {label}
       </p>
       <div className="flex flex-wrap items-start gap-3">{children}</div>
@@ -296,41 +297,42 @@ function StateGroup({
 }
 
 function Grid({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-col gap-6">{children}</div>;
+  return <div className="flex flex-col gap-7">{children}</div>;
 }
 
 function ColorSwatches() {
   const swatches: Array<{ label: string; className: string; note?: string }> = [
-    { label: "navy-900", className: "bg-navy-900", note: "brand" },
-    { label: "navy-800", className: "bg-navy-800" },
-    { label: "navy-700", className: "bg-navy-700" },
-    { label: "navy-500", className: "bg-navy-500" },
-    { label: "navy-300", className: "bg-navy-300" },
-    { label: "navy-100", className: "bg-navy-100" },
-    { label: "navy-50", className: "bg-navy-50" },
-    { label: "green-700", className: "bg-green-700", note: "trust" },
-    { label: "green-500", className: "bg-green-500" },
-    { label: "green-200", className: "bg-green-200" },
-    { label: "green-100", className: "bg-green-100" },
+    { label: "forest-900", className: "bg-forest-900", note: "brand" },
+    { label: "forest-950", className: "bg-forest-950" },
+    { label: "sage", className: "bg-sage", note: "interactive" },
+    { label: "sage-soft", className: "bg-sage-soft" },
+    { label: "cream", className: "bg-cream", note: "page bg" },
+    { label: "cream-deep", className: "bg-cream-deep" },
+    { label: "bone", className: "bg-bone", note: "card surface" },
+    { label: "ochre", className: "bg-ochre", note: "reserved CTA" },
+    { label: "ochre-deep", className: "bg-ochre-deep" },
     { label: "success", className: "bg-success" },
     { label: "warning", className: "bg-warning" },
     { label: "danger", className: "bg-danger" },
+    { label: "neutral-300 (border)", className: "bg-neutral-300" },
+    { label: "neutral-400", className: "bg-neutral-400" },
+    { label: "neutral-700", className: "bg-neutral-700" },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {swatches.map((s) => (
         <div
           key={s.label}
-          className="flex flex-col gap-2 rounded-md border border-navy-100 bg-surface p-3"
+          className="flex flex-col gap-2 rounded-md border border-border bg-bone p-3"
         >
           <div className={`${s.className} h-16 rounded-sm`} />
-          <div className="flex items-baseline justify-between">
-            <span className="text-small font-medium text-navy-800">
+          <div className="flex flex-col">
+            <span className="text-caption font-medium text-ink">
               {s.label}
             </span>
             {s.note && (
-              <span className="text-caption text-navy-500">{s.note}</span>
+              <span className="text-micro text-ink-3">{s.note}</span>
             )}
           </div>
         </div>

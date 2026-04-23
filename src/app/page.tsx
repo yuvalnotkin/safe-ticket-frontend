@@ -3,15 +3,19 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import Image from "next/image";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
-// The homepage is the narrative: hero → trust pillars → how it works →
-// refund note. Every section restates the product's core promise (verified,
-// face value, official transfer, escrow) — the repetition is load-bearing
-// per CLAUDE.md rules, not fluff. Global header + footer live in
-// layout.tsx; this file owns only the page content.
+// Editorial homepage in the Cloverly idiom:
+//   Hero (2-col grid: copy left, dark hero card right with search over
+//     concert photography)
+//   Trust bar (forest band)
+//   How it works (numbered editorial steps)
+//   Closing refund note
+//
+// Every section restates the product's core promise (verified / face value
+// / official transfer / escrow) — that repetition is load-bearing per
+// CLAUDE.md rules, not decorative filler.
 
 export default function Home() {
   const router = useRouter();
@@ -26,8 +30,9 @@ export default function Home() {
   return (
     <>
       <Hero query={query} setQuery={setQuery} onSubmit={onSearch} />
-      <TrustPillars />
+      <TrustBar />
       <HowItWorks />
+      <ProvidersStrip />
       <RefundNote />
     </>
   );
@@ -44,109 +49,115 @@ function Hero({
 }) {
   const { t } = useLanguage();
   return (
-    <section className="border-b border-navy-100 bg-gradient-to-b from-navy-50 to-bg">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-6 py-16 md:py-24">
-        <div className="flex max-w-3xl flex-col gap-4">
-          <h1 className="font-display text-display text-navy-900">
+    <section className="bg-cream">
+      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-16 px-6 py-24 md:px-12 md:py-32 lg:grid-cols-[1.2fr_1fr]">
+        <div className="flex flex-col gap-6">
+          <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
+            {t("home.eyebrow")}
+          </span>
+          <h1 className="font-display text-display-lg font-medium leading-[1.02] text-ink">
             {t("home.heroTitle")}
           </h1>
-          <p className="text-body-lg text-navy-700">{t("home.heroSubtitle")}</p>
-        </div>
-        <form
-          onSubmit={onSubmit}
-          className="flex w-full max-w-2xl flex-col gap-3 md:flex-row"
-        >
-          <div className="flex-1">
-            <Input
-              type="search"
-              placeholder={t("home.searchPlaceholder")}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              leadingIcon={<SearchIcon />}
-              aria-label={t("home.searchPlaceholder")}
-            />
+          <p className="max-w-[560px] text-body-lg text-ink-2">
+            {t("home.heroSubtitle")}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/search"
+              className="inline-flex h-13 items-center rounded-md bg-ochre px-6 text-body font-medium text-white transition-colors hover:bg-ochre-deep focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
+            >
+              {t("home.searchCta")}
+            </Link>
+            <Link
+              href="/how-it-works"
+              className="inline-flex h-13 items-center rounded-md border border-border-strong bg-transparent px-6 text-body font-medium text-ink transition-colors hover:bg-bone focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
+            >
+              {t("nav.howItWorks")}
+            </Link>
           </div>
-          <Button type="submit" size="lg">
-            {t("home.searchCta")}
-          </Button>
-        </form>
-        <QuickTrustRow />
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl shadow-md">
+          <Image
+            src="/images/hero-concert.jpg"
+            alt=""
+            width={1200}
+            height={900}
+            priority
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-950/55 to-forest-950/92" />
+          <div className="relative flex min-h-[360px] flex-col justify-between p-8 text-cream">
+            <div>
+              <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-on-dark-2">
+                {t("home.searchCta")}
+              </span>
+              <h2 className="mt-3 font-display text-h2 font-medium leading-tight">
+                {t("home.heroCardTitle")}
+              </h2>
+            </div>
+            <div className="flex flex-col gap-4">
+              <form
+                onSubmit={onSubmit}
+                className="flex items-center gap-1 rounded-md bg-bone/95 p-1.5"
+              >
+                <span className="ps-3 text-ink-3" aria-hidden="true">
+                  <SearchIcon />
+                </span>
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={t("home.searchPlaceholder")}
+                  aria-label={t("home.searchPlaceholder")}
+                  className="h-11 min-w-0 flex-1 bg-transparent px-2 text-body text-ink outline-none placeholder:text-ink-3"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex h-10 shrink-0 items-center rounded-md bg-ochre px-4 text-caption font-medium text-white transition-colors hover:bg-ochre-deep"
+                >
+                  {t("common.search")}
+                </button>
+              </form>
+              <div className="flex flex-wrap gap-2">
+                {(["מכבי תל אביב", "הפועל", "עומר אדם", "שלמה ארצי"] as const).map(
+                  (chip) => (
+                    <span
+                      key={chip}
+                      className="rounded-pill border border-border-on-dark bg-white/10 px-3 py-1.5 text-caption text-ink-on-dark-2"
+                    >
+                      {chip}
+                    </span>
+                  ),
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-function QuickTrustRow() {
+function TrustBar() {
   const { t } = useLanguage();
   const items = [
-    t("trust.verified"),
-    t("trust.faceValue"),
-    t("trust.officialTransfer"),
-    t("trust.escrow"),
+    { title: t("trust.faceValue"), sub: t("home.trustFaceValueShort") },
+    { title: t("trust.escrow"), sub: t("home.trustEscrowShort") },
+    { title: t("trust.officialTransfer"), sub: t("home.trustTransferShort") },
   ];
   return (
-    <div className="flex flex-wrap items-center gap-3 text-small text-navy-700">
-      {items.map((item, i) => (
-        <span key={item} className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 font-medium">
-            <CheckIcon className="h-4 w-4 text-green-700" />
-            {item}
-          </span>
-          {i < items.length - 1 && (
-            <span aria-hidden="true" className="text-navy-300">
-              ·
-            </span>
-          )}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-function TrustPillars() {
-  const { t } = useLanguage();
-  const pillars = [
-    {
-      icon: <ShieldIcon />,
-      title: t("home.trustVerifiedTitle"),
-      body: t("home.trustVerifiedBody"),
-    },
-    {
-      icon: <TagIcon />,
-      title: t("home.trustFaceValueTitle"),
-      body: t("home.trustFaceValueBody"),
-    },
-    {
-      icon: <TransferIcon />,
-      title: t("home.trustOfficialTransferTitle"),
-      body: t("home.trustOfficialTransferBody"),
-    },
-    {
-      icon: <LockIcon />,
-      title: t("home.trustEscrowTitle"),
-      body: t("home.trustEscrowBody"),
-    },
-  ];
-  return (
-    <section className="bg-surface py-16 md:py-20">
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <h2 className="mb-8 text-h1 font-bold text-navy-900">
-          {t("home.trustIntro")}
-        </h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((p) => (
-            <div
-              key={p.title}
-              className="flex flex-col gap-3 rounded-lg border border-navy-100 bg-bg p-6"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-green-100 text-green-700">
-                {p.icon}
-              </span>
-              <h3 className="text-h3 font-semibold text-navy-900">{p.title}</h3>
-              <p className="text-body text-navy-700">{p.body}</p>
+    <section className="bg-forest-900 py-10 text-cream md:py-12">
+      <div className="mx-auto grid w-full max-w-[1200px] gap-8 px-6 md:grid-cols-3 md:gap-12 md:px-12">
+        {items.map((item) => (
+          <div key={item.title} className="flex items-start gap-4">
+            <CheckCircleIcon className="mt-0.5 h-6 w-6 shrink-0 text-sage-soft" />
+            <div className="flex flex-col gap-1">
+              <p className="text-body font-medium">{item.title}</p>
+              <p className="text-caption text-ink-on-dark-2">{item.sub}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -156,51 +167,77 @@ function HowItWorks() {
   const { t } = useLanguage();
   const steps = [
     {
+      n: "01",
       title: t("home.howItWorksStep1Title"),
       body: t("home.howItWorksStep1Body"),
     },
     {
+      n: "02",
       title: t("home.howItWorksStep2Title"),
       body: t("home.howItWorksStep2Body"),
     },
     {
+      n: "03",
       title: t("home.howItWorksStep3Title"),
       body: t("home.howItWorksStep3Body"),
     },
   ];
   return (
-    <section className="bg-navy-900 py-16 text-white md:py-20">
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <h2 className="mb-10 font-display text-h1 font-bold">
+    <section className="bg-cream py-24 md:py-32">
+      <div className="mx-auto w-full max-w-[1200px] px-6 md:px-12">
+        <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
+          {t("home.howItWorksEyebrow")}
+        </span>
+        <h2 className="mt-4 max-w-[680px] font-display text-display-md font-medium leading-tight text-ink">
           {t("home.howItWorksTitle")}
         </h2>
-        <ol className="grid gap-6 md:grid-cols-3">
-          {steps.map((s, i) => (
-            <li
-              key={s.title}
-              className="flex flex-col gap-3 rounded-lg border border-navy-700 bg-navy-800 p-6"
+        <div className="mt-12 grid gap-8 md:grid-cols-3 md:gap-6">
+          {steps.map((s) => (
+            <div
+              key={s.n}
+              className="flex flex-col gap-4 border-t border-forest-900 pt-6"
             >
-              <span className="font-display text-h1 font-bold text-green-300">
-                {String(i + 1).padStart(2, "0")}
+              <span className="font-display text-caption tracking-wider text-ink-3">
+                {s.n}
               </span>
-              <h3 className="text-h3 font-semibold">{s.title}</h3>
-              <p className="text-body text-navy-100">{s.body}</p>
-            </li>
+              <h3 className="font-display text-h3 font-medium leading-tight text-ink">
+                {s.title}
+              </h3>
+              <p className="text-body text-ink-2">{s.body}</p>
+            </div>
           ))}
-        </ol>
-        <div className="mt-10 flex flex-wrap gap-3">
+        </div>
+        <div className="mt-12">
           <Link
             href="/search"
-            className="inline-flex h-12 items-center rounded-md bg-green-700 px-6 text-body font-medium text-white transition-colors hover:bg-green-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            className="inline-flex h-12 items-center rounded-md bg-forest-900 px-6 text-body font-medium text-cream transition-colors hover:bg-forest-950 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
           >
             {t("home.ctaBrowse")} →
           </Link>
-          <Link
-            href="/how-it-works"
-            className="inline-flex h-12 items-center rounded-md border border-white/30 px-6 text-body font-medium text-white transition-colors hover:bg-white/5"
-          >
-            {t("nav.howItWorks")}
-          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProvidersStrip() {
+  const { t } = useLanguage();
+  const providers = ["ticketmaster", "leaan", "eventim", "hadran"] as const;
+  return (
+    <section className="border-y border-border bg-bone py-12">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 md:flex-row md:items-center md:gap-12 md:px-12">
+        <p className="text-caption font-medium text-ink-3 md:max-w-[220px]">
+          {t("home.providersIntro")}
+        </p>
+        <div className="flex flex-wrap items-center gap-6 md:gap-10">
+          {providers.map((p) => (
+            <span
+              key={p}
+              className="font-display text-h4 font-medium text-ink"
+            >
+              {t(`providerName.${p}`)}
+            </span>
+          ))}
         </div>
       </div>
     </section>
@@ -210,115 +247,39 @@ function HowItWorks() {
 function RefundNote() {
   const { t } = useLanguage();
   return (
-    <section className="bg-bg py-8">
-      <div className="mx-auto w-full max-w-[1200px] px-6">
-        <p className="text-small text-navy-500">{t("home.refundNote")}</p>
+    <section className="bg-cream py-10">
+      <div className="mx-auto w-full max-w-[1200px] px-6 md:px-12">
+        <p className="text-caption text-ink-3">{t("home.refundNote")}</p>
       </div>
     </section>
   );
 }
 
-function SearchIcon({ className }: { className?: string } = {}) {
+function CheckCircleIcon({ className }: { className?: string }) {
   return (
-    <svg
-      className={className ?? "h-5 w-5"}
-      viewBox="0 0 20 20"
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.75" />
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="m8 12 3 3 5-6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 20 20" className="h-5 w-5" fill="none" aria-hidden="true">
+      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5" />
       <path
         d="m14 14 4 4"
         stroke="currentColor"
-        strokeWidth="1.75"
+        strokeWidth="1.5"
         strokeLinecap="round"
       />
-    </svg>
-  );
-}
-
-function CheckIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path
-        d="m5 10 3.5 3.5L15 6.5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ShieldIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"
-        fill="currentColor"
-        fillOpacity="0.15"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m9 12 2 2 4-4"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function TagIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M12 2H5v7l13 13 7-7-13-13z"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinejoin="round"
-      />
-      <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-    </svg>
-  );
-}
-
-function TransferIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M4 8h14m0 0-4-4m4 4-4 4M20 16H6m0 0 4 4m-4-4 4-4"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function LockIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <rect
-        x="4"
-        y="10"
-        width="16"
-        height="11"
-        rx="2"
-        stroke="currentColor"
-        strokeWidth="1.75"
-      />
-      <path
-        d="M8 10V7a4 4 0 0 1 8 0v3"
-        stroke="currentColor"
-        strokeWidth="1.75"
-      />
-      <circle cx="12" cy="15.5" r="1.5" fill="currentColor" />
     </svg>
   );
 }
