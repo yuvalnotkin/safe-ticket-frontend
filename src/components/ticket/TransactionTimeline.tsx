@@ -3,19 +3,15 @@
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
-// Visualizes the four-step escrow flow: payment → transfer initiated →
-// buyer confirms receipt → seller paid. On the /tickets/[id] page it
-// shows the steps as "what will happen after you buy" (all upcoming).
-// Phase 4 will hook real state in; the component accepts a `currentStep`
-// index so the same visual handles every runtime state.
-//
-// Step states:
-//   - done     (index < currentStep) — check icon, green
-//   - current  (index === currentStep) — pulsing dot, navy
-//   - upcoming (index > currentStep) — empty circle, muted
+// Four-step escrow flow visual. Accepts `currentStep` so the same component
+// handles every runtime state; on the details page it renders as "what will
+// happen after you buy" (currentStep = -1, all upcoming).
+//   - done     → sage dot + connecting rail, deemphasized copy
+//   - current  → pulsing forest ring, full-color copy
+//   - upcoming → outlined circle + number, muted copy
 
 export type TransactionTimelineProps = {
-  /** 0-based index of the currently active step. -1 means no step active yet (all upcoming). */
+  /** 0-based index of the currently active step. -1 means no step yet. */
   currentStep?: number;
   className?: string;
 };
@@ -46,7 +42,7 @@ export function TransactionTimeline({
                 aria-hidden="true"
                 className={cn(
                   "absolute start-[15px] top-8 bottom-0 w-px",
-                  state === "done" ? "bg-green-700" : "bg-navy-100",
+                  state === "done" ? "bg-sage" : "bg-border",
                 )}
               />
             )}
@@ -55,8 +51,8 @@ export function TransactionTimeline({
               <div className="flex items-center gap-2">
                 <h3
                   className={cn(
-                    "text-body font-semibold",
-                    state === "upcoming" ? "text-navy-500" : "text-navy-900",
+                    "font-display text-h4 font-medium",
+                    state === "upcoming" ? "text-ink-3" : "text-ink",
                   )}
                 >
                   {step.title}
@@ -65,8 +61,8 @@ export function TransactionTimeline({
               </div>
               <p
                 className={cn(
-                  "text-small",
-                  state === "upcoming" ? "text-navy-400" : "text-navy-700",
+                  "text-body",
+                  state === "upcoming" ? "text-ink-3" : "text-ink-2",
                 )}
               >
                 {step.body}
@@ -88,7 +84,7 @@ function StepMarker({
 }) {
   if (state === "done") {
     return (
-      <span className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-700 text-white">
+      <span className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sage text-cream">
         <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
           <path
             d="m3.5 8.5 3 3 6-7"
@@ -103,17 +99,17 @@ function StepMarker({
   }
   if (state === "current") {
     return (
-      <span className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-navy-900 text-small font-semibold text-white">
+      <span className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-forest-900 text-caption font-semibold text-cream">
         {index}
         <span
           aria-hidden="true"
-          className="absolute inset-0 animate-ping rounded-full bg-navy-900 opacity-30"
+          className="absolute inset-0 animate-ping rounded-full bg-forest-900 opacity-30"
         />
       </span>
     );
   }
   return (
-    <span className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-navy-200 bg-surface text-small font-semibold text-navy-400">
+    <span className="relative z-10 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-border-strong bg-bone text-caption font-semibold text-ink-3">
       {index}
     </span>
   );
@@ -123,20 +119,20 @@ function StateBadge({ state }: { state: "done" | "current" | "upcoming" }) {
   const { t } = useLanguage();
   if (state === "done") {
     return (
-      <span className="inline-flex items-center rounded-pill bg-green-100 px-2 py-0.5 text-caption font-medium text-green-800">
+      <span className="inline-flex items-center rounded-pill bg-success-bg px-2 py-0.5 text-micro font-medium text-sage">
         {t("ticket.stateDone")}
       </span>
     );
   }
   if (state === "current") {
     return (
-      <span className="inline-flex items-center rounded-pill bg-navy-100 px-2 py-0.5 text-caption font-medium text-navy-800">
+      <span className="inline-flex items-center rounded-pill bg-forest-900 px-2 py-0.5 text-micro font-medium text-cream">
         {t("ticket.stateCurrent")}
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center rounded-pill bg-navy-50 px-2 py-0.5 text-caption font-medium text-navy-500">
+    <span className="inline-flex items-center rounded-pill bg-cream-deep px-2 py-0.5 text-micro font-medium text-ink-3">
       {t("ticket.stateUpcoming")}
     </span>
   );

@@ -1,42 +1,29 @@
 "use client";
 
-import { Badge } from "@/components/ui/Badge";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
-// Green-tinted, pill-shaped, shield icon. Appears on every ticket card
-// and the ticket details page. Copy is translated — never hardcoded.
-// design_system.md §7: reads as reassuring, not decorative.
+// Per the refreshed design direction, the "verified" signal now reads as a
+// fact rather than a sticker: inline sage-colored checkmark + word, no pill
+// background. Appears on every ticket card and the details page.
 
 export function VerificationBadge() {
   const { t } = useLanguage();
   return (
-    <Badge tone="trust" leadingIcon={<ShieldIcon />}>
-      {t("trust.verified")}
-    </Badge>
+    <span className="inline-flex items-center gap-1.5 text-caption font-medium text-sage">
+      <CheckIcon className="h-4 w-4" />
+      <span>{t("trust.verified")}</span>
+    </span>
   );
 }
 
-function ShieldIcon() {
+function CheckIcon({ className }: { className?: string }) {
   return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="1.5" />
       <path
-        d="M12 2L4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"
-        fill="currentColor"
-        fillOpacity="0.15"
+        d="m6.5 10 2.5 2.5 4.5-5"
         stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m9 12 2 2 4-4"
-        stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

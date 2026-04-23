@@ -11,14 +11,10 @@ import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useToast } from "@/components/ui/Toast";
 import type { Ticket } from "@/lib/types";
 
-// Full ticket details page. Two-column on md+: event + seat + timeline +
-// trust callout on the left, price + Buy CTA + seller card on the right
-// (sticky). Collapses to a single column on mobile with the price block
-// lifted to the top so it stays visible as the user scrolls.
-//
-// Buy CTA is intentionally non-functional — the Phase 1 MVP visualizes
-// the product; real checkout lands after Phase 2's backend integration.
-// Clicking surfaces a toast to confirm the action was received.
+// Editorial ticket details page. Two-column on lg+: narrative on the left
+// (event info + seat + timeline + trust callout), action card on the right
+// (price + Buy CTA + seller). Collapses to single-column on mobile with the
+// action card floating above the timeline so price + Buy stay above the fold.
 
 export function TicketDetails({ ticket }: { ticket: Ticket }) {
   const { t, language } = useLanguage();
@@ -44,43 +40,43 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 py-6 md:px-6 md:py-10">
+    <main className="mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-6 py-10 md:py-14">
       <Link
         href="/search"
-        className="self-start text-small font-medium text-navy-600 hover:text-navy-900"
+        className="link-underline self-start text-caption font-medium text-ink-2"
       >
         ← {t("nav.browse")}
       </Link>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        {/* LEFT: event info, seat, timeline, trust */}
-        <div className="flex flex-col gap-6">
+      <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
+        {/* LEFT: event info + seat + timeline + trust */}
+        <div className="flex flex-col gap-8">
           <section className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-3">
               <VerificationBadge />
-              <Badge tone="neutral">
-                {t("ticket.provider")}: {t(`providerName.${ticket.provider}`)}
+              <Badge tone="info" mono>
+                {ticket.provider}
               </Badge>
               <Badge tone="neutral">
                 {t(`category.${ticket.event.category}`)}
               </Badge>
             </div>
-            <h1 className="text-h1 font-bold text-navy-900">
+            <h1 className="font-display text-display-md font-medium text-ink">
               {ticket.event.name}
             </h1>
-            <p className="text-body-lg text-navy-700">
+            <p className="text-body-lg text-ink-2">
               {dateLabel} · {timeLabel}
             </p>
-            <p className="text-body text-navy-600">
+            <p className="text-body text-ink-3">
               {ticket.event.venue}, {ticket.event.city}
             </p>
           </section>
 
-          <Card className="p-5">
-            <h2 className="text-h3 font-semibold text-navy-900">
+          <Card className="p-6">
+            <h2 className="font-display text-h3 font-medium text-ink">
               {t("ticket.seatDetails")}
             </h2>
-            <dl className="mt-4 grid grid-cols-3 gap-4 text-small">
+            <dl className="mt-5 grid grid-cols-3 gap-4">
               <SeatField label={t("ticket.section")} value={ticket.seat.section} />
               {ticket.seat.row && (
                 <SeatField label={t("ticket.row")} value={ticket.seat.row} />
@@ -91,14 +87,14 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
             </dl>
           </Card>
 
-          <Card className="p-5">
-            <h2 className="text-h3 font-semibold text-navy-900">
+          <Card className="p-6">
+            <h2 className="font-display text-h3 font-medium text-ink">
               {t("ticket.timelineTitle")}
             </h2>
-            <p className="mt-1 text-small text-navy-600">
+            <p className="mt-1 text-caption text-ink-3">
               {t("home.refundNote")}
             </p>
-            <div className="mt-5">
+            <div className="mt-6">
               <TransactionTimeline />
             </div>
           </Card>
@@ -106,18 +102,18 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
           <WhySafe />
         </div>
 
-        {/* RIGHT: price + buy + seller (sticky on md+) */}
+        {/* RIGHT: price + Buy + seller (sticky on lg+) */}
         <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
-          <Card className="flex flex-col gap-4 p-5">
+          <Card className="flex flex-col gap-5 p-6">
             <PriceBreakdown
               faceValue={ticket.price.faceValue}
               serviceFee={ticket.price.serviceFee}
               variant="full"
             />
-            <Button variant="trust" size="lg" onClick={handleBuy}>
+            <Button variant="cta" size="lg" onClick={handleBuy}>
               {t("ticket.buyCta")}
             </Button>
-            <p className="text-caption text-navy-500">
+            <p className="text-caption text-ink-3">
               {t("ticket.refundNote")}
             </p>
           </Card>
@@ -132,12 +128,10 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
 function SeatField({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1">
-      <dt className="text-caption font-medium uppercase tracking-wide text-navy-500">
+      <dt className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
         {label}
       </dt>
-      <dd className="font-display text-body-lg font-semibold text-navy-900">
-        {value}
-      </dd>
+      <dd className="font-display text-h3 font-medium text-ink">{value}</dd>
     </div>
   );
 }
@@ -151,14 +145,14 @@ function WhySafe() {
     t("trust.whySafeEscrow"),
   ];
   return (
-    <section className="rounded-lg border border-green-200 bg-green-50 p-5">
-      <h2 className="text-h3 font-semibold text-green-900">
+    <section className="rounded-lg border border-border bg-cream-deep p-6">
+      <h2 className="font-display text-h3 font-medium text-forest-900">
         {t("trust.whySafeTitle")}
       </h2>
       <ul className="mt-4 flex flex-col gap-3">
         {points.map((point) => (
-          <li key={point} className="flex gap-3 text-body text-navy-800">
-            <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-green-700" />
+          <li key={point} className="flex gap-3 text-body text-ink-2">
+            <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-sage" />
             <span>{point}</span>
           </li>
         ))}
@@ -169,9 +163,6 @@ function WhySafe() {
 
 function SellerCard({ ticketId }: { ticketId: string }) {
   const { t, language } = useLanguage();
-  // Static preview for Phase 1 — Phase 2 will pull a real seller profile
-  // from the backend. ticketId is used only to vary the avatar initial so
-  // different tickets don't all show identical mock identities.
   const initial = ticketId.slice(-1).toUpperCase();
   const sinceDate = new Intl.DateTimeFormat(
     language === "he" ? "he-IL" : "en-US",
@@ -179,31 +170,41 @@ function SellerCard({ ticketId }: { ticketId: string }) {
   ).format(new Date("2024-08-01"));
 
   return (
-    <Card className="p-5">
-      <h2 className="text-h3 font-semibold text-navy-900">{t("ticket.seller")}</h2>
+    <Card className="p-6">
+      <h2 className="font-display text-h3 font-medium text-ink">
+        {t("ticket.seller")}
+      </h2>
       <div className="mt-4 flex items-center gap-3">
-        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-navy-100 font-display text-h3 font-bold text-navy-900">
+        <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-forest-900 font-display text-h3 font-medium text-cream">
           {initial}
         </span>
         <div className="flex flex-col">
-          <span className="text-body font-medium text-navy-900">
-            {t("trust.verifiedBadge")}
-          </span>
-          <span className="text-small text-navy-600">
+          <VerificationBadge />
+          <span className="text-caption text-ink-3">
             {t("ticket.sellerSince").replace("{date}", sinceDate)}
           </span>
         </div>
       </div>
-      <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-navy-100 pt-4 text-small">
+      <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-4">
         <div className="flex flex-col gap-1">
-          <dt className="text-caption text-navy-500">{t("ticket.sellerRating")}</dt>
-          <dd className="font-display text-h3 font-semibold text-navy-900" data-numeric>
+          <dt className="text-micro uppercase tracking-[0.12em] text-ink-3">
+            {t("ticket.sellerRating")}
+          </dt>
+          <dd
+            className="font-display text-h3 font-medium text-ink"
+            data-numeric
+          >
             4.9 / 5
           </dd>
         </div>
         <div className="flex flex-col gap-1">
-          <dt className="text-caption text-navy-500">{t("ticket.sellerTransfers")}</dt>
-          <dd className="font-display text-h3 font-semibold text-navy-900" data-numeric>
+          <dt className="text-micro uppercase tracking-[0.12em] text-ink-3">
+            {t("ticket.sellerTransfers")}
+          </dt>
+          <dd
+            className="font-display text-h3 font-medium text-ink"
+            data-numeric
+          >
             12
           </dd>
         </div>
