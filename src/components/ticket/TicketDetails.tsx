@@ -13,8 +13,15 @@ import type { Ticket } from "@/lib/types";
 
 // Editorial ticket details page. Two-column on lg+: narrative on the left
 // (event info + seat + timeline + trust callout), action card on the right
-// (price + Buy CTA + seller). Collapses to single-column on mobile with the
-// action card floating above the timeline so price + Buy stay above the fold.
+// (price + Buy CTA + seller). Mobile stacks the action card *between* the
+// seat block and the timeline so price + Buy is above the fold and the
+// user sees it before the "what happens after you buy" timeline.
+//
+// Implementation: grid with the left column split into a top chunk (event,
+// seat) and a bottom chunk (timeline, why-safe). The action-card aside
+// sits in DOM order between the two chunks, so it flows naturally on
+// mobile. On lg+ it's explicitly placed at col-start-2 / row-span-2 and
+// becomes sticky inside its grid cell.
 
 export function TicketDetails({ ticket }: { ticket: Ticket }) {
   const { t, language } = useLanguage();
@@ -49,8 +56,9 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_400px]">
-        {/* LEFT: event info + seat + timeline + trust */}
-        <div className="flex flex-col gap-8">
+        {/* LEFT — top chunk (event + seat). On lg+ lives at col-start-1,
+            row-start-1. On mobile this renders before the aside. */}
+        <div className="flex flex-col gap-8 lg:col-start-1 lg:row-start-1">
           <section className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center gap-3">
               <VerificationBadge />
@@ -86,24 +94,11 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
               )}
             </dl>
           </Card>
-
-          <Card className="p-6">
-            <h2 className="font-display text-h3 font-medium text-ink">
-              {t("ticket.timelineTitle")}
-            </h2>
-            <p className="mt-1 text-caption text-ink-3">
-              {t("home.refundNote")}
-            </p>
-            <div className="mt-6">
-              <TransactionTimeline />
-            </div>
-          </Card>
-
-          <WhySafe />
         </div>
 
-        {/* RIGHT: price + Buy + seller (sticky on lg+) */}
-        <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">
+        {/* ACTION CARD — sits between left chunks on mobile (DOM order),
+            column 2 spanning both rows on lg+ (sticky). */}
+        <aside className="flex flex-col gap-4 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-24 lg:self-start">
           <Card className="flex flex-col gap-5 p-6">
             <PriceBreakdown
               faceValue={ticket.price.faceValue}
@@ -120,6 +115,24 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
 
           <SellerCard ticketId={ticket.id} />
         </aside>
+
+        {/* LEFT — bottom chunk (timeline + why-safe). On lg+ at col-start-1,
+            row-start-2 so it sits directly below the top chunk. */}
+        <div className="flex flex-col gap-8 lg:col-start-1 lg:row-start-2">
+          <Card className="p-6">
+            <h2 className="font-display text-h3 font-medium text-ink">
+              {t("ticket.timelineTitle")}
+            </h2>
+            <p className="mt-1 text-caption text-ink-3">
+              {t("home.refundNote")}
+            </p>
+            <div className="mt-6">
+              <TransactionTimeline />
+            </div>
+          </Card>
+
+          <WhySafe />
+        </div>
       </div>
     </main>
   );
