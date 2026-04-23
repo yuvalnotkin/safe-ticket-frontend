@@ -14,10 +14,10 @@ Only official transfer mechanisms supported. Escrow holds funds until transfer c
 
 ## Design Direction
 See `design_system.md` for the full design system (tokens, fonts, RTL rules, anti-patterns). Summary:
-- Brand: Dark navy (#1B2A4A), Trust green (#2D6A4F), Clean white (#FAFAFA)
-- Fonts: Rubik (display) + Assistant (body) — Hebrew-first. Never Inter, Roboto, Arial, or system-ui.
-- Tone: Premium, trustworthy, fintech-like — NOT a bazaar or generic marketplace
-- References: StubHub (search UX), Revolut (trust feel), Wolt (card design)
+- Brand: Forest (#063B2E), Sage (#3B7C5F), Cream (#F4EFE6), Ochre CTA (#C97A3B — reserved use only). Source of truth: `@theme` block in `src/app/globals.css`.
+- Fonts: Frank Ruhl Libre (display/serif) + Rubik (body/sans) — both Hebrew-first. Never Inter, Roboto, Arial, or system-ui.
+- Tone: Calm, editorial, premium-without-luxury. Cloverly-inspired (honest, verified). NOT a bazaar, NOT fintech-flashy.
+- References: Cloverly (visual language, typographic scale), StubHub (search UX), Revolut (trust-through-polish).
 - Mobile-first responsive. Hebrew primary, English toggle.
 - MUST look unique — avoid generic vibe-coded aesthetics
 
@@ -29,7 +29,7 @@ src/
   styles/        → Global styles, Tailwind config customizations
 
 ## Current Sprint
-Phase 1 complete. Full walkthrough: `/` → `/search` → `/tickets/[id]` → `/how-it-works` → `/faq` → `/login`. Next: Phase 2 planning (backend integration), pending human direction.
+Phase 1 complete + comprehensive design refresh (Cloverly-inspired cream/forest/serif direction). Full walkthrough: `/` → `/search` → `/tickets/[id]` → `/how-it-works` → `/faq` → `/login`. Next: Phase 2 planning (backend integration), pending human direction.
 
 ## API Contract
 See API_CONTRACT.md for all backend endpoints.
