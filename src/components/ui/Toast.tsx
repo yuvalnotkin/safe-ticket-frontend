@@ -11,13 +11,8 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 
-// Simple transient notifications. Used wherever Phase 1 surfaces a
-// "not yet available" or "coming soon" state (login submit, Buy CTA).
-// Toasts stack at bottom-center on mobile, bottom-start on desktop; each
-// auto-dismisses after 4s and can be dismissed by click.
-//
-// Not a portal in Phase 1 — the viewer lives at the bottom of <body>
-// inside layout.tsx; z-50 keeps it above page content and the Sheet.
+// Simple transient notifications for "not yet available" / "coming soon"
+// flows. Stacks at bottom-center on mobile, bottom-start on desktop.
 
 type ToastTone = "info" | "success" | "warning";
 
@@ -71,7 +66,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             onClick={() => dismiss(t.id)}
             className={cn(
               "pointer-events-auto w-full max-w-sm rounded-md px-4 py-3 text-start text-body shadow-md",
-              "transition-transform duration-150",
+              "transition-transform duration-200 ease-out",
               TONE_CLASSES[t.tone],
             )}
           >
@@ -84,9 +79,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 }
 
 const TONE_CLASSES: Record<ToastTone, string> = {
-  info: "bg-navy-900 text-white",
-  success: "bg-green-700 text-white",
-  warning: "bg-warning-bg text-warning border border-warning",
+  info: "bg-forest-900 text-cream",
+  success: "bg-sage text-cream",
+  warning: "bg-warning-bg text-ochre-deep border border-ochre/40",
 };
 
 export function useToast(): ToastContextValue {

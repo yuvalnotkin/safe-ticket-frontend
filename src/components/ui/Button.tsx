@@ -2,14 +2,14 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 // Variants:
-//   primary  — solid navy. Default for most actions.
-//   trust    — solid green. Reserved for trust-critical CTAs (Buy, List).
-//              design_system.md §7: green is NOT a generic highlight; only
-//              use `trust` where the action itself carries trust semantics.
-//   secondary — outlined navy. Non-primary actions alongside a primary.
-//   ghost     — no border, hover background. Tertiary / icon buttons.
+//   primary   — solid forest. Default for most actions.
+//   cta       — solid ochre. Reserved for the SINGLE most important action
+//               on a view (Buy ticket, List a ticket, hero search).
+//               Overusing ochre dilutes its meaning (design_system.md §2).
+//   secondary — outlined forest, inverts on hover.
+//   ghost     — no fill, warm-grey border. Tertiary / icon buttons.
 
-type Variant = "primary" | "trust" | "secondary" | "ghost";
+type Variant = "primary" | "cta" | "secondary" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -22,19 +22,18 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const VARIANT_CLASSES: Record<Variant, string> = {
   primary:
-    "bg-navy-900 text-white hover:bg-navy-800 active:bg-navy-950 disabled:bg-navy-300",
-  trust:
-    "bg-green-700 text-white hover:bg-green-800 active:bg-green-900 disabled:bg-green-200",
+    "bg-forest-900 text-cream hover:bg-forest-950 active:bg-forest-950 disabled:bg-forest-300 disabled:text-cream",
+  cta: "bg-ochre text-white hover:bg-ochre-deep active:bg-ochre-deep disabled:opacity-50",
   secondary:
-    "border border-navy-900 text-navy-900 hover:bg-navy-50 active:bg-navy-100 disabled:border-navy-200 disabled:text-navy-300",
+    "border border-forest-900 text-forest-900 hover:bg-forest-900 hover:text-cream active:bg-forest-950 disabled:border-forest-300 disabled:text-forest-300 disabled:hover:bg-transparent disabled:hover:text-forest-300",
   ghost:
-    "text-navy-900 hover:bg-navy-100 active:bg-navy-200 disabled:text-navy-300",
+    "border border-border-strong text-forest-900 hover:bg-bone active:bg-cream-deep disabled:text-neutral-500",
 };
 
 const SIZE_CLASSES: Record<Size, string> = {
-  sm: "h-9 px-3 text-small gap-1.5",
-  md: "h-11 px-5 text-body gap-2",
-  lg: "h-13 px-6 text-body-lg gap-2",
+  sm: "h-9 px-3.5 text-caption gap-1.5",
+  md: "h-11 px-5 text-small gap-2",
+  lg: "h-13 px-6 text-body gap-2",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -62,8 +61,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         aria-busy={loading || undefined}
         className={cn(
           "inline-flex items-center justify-center rounded-md font-medium",
-          "transition-colors duration-150",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900",
+          "transition-all duration-200 ease-out",
+          "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/40",
           "disabled:cursor-not-allowed",
           VARIANT_CLASSES[variant],
           SIZE_CLASSES[size],

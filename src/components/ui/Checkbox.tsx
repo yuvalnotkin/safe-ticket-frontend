@@ -1,11 +1,9 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-// Uses a real <input type="checkbox"> (sr-only) for keyboard + a11y
-// behavior; the visual box is a peer-sibling span. The checkmark SVG lives
-// inside the visual span and is made visible via an arbitrary-selector
-// variant: peer-checked:[&>svg]:opacity-100 (when the peer is checked,
-// direct-child svg's opacity goes from 0 → 1).
+// Real <input type="checkbox"> (sr-only) for keyboard + a11y; visual box is
+// a peer-sibling span with checkmark revealed via
+// peer-checked:[&>svg]:opacity-100.
 
 export type CheckboxProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -23,7 +21,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       <label
         htmlFor={inputId}
         className={cn(
-          "inline-flex items-center gap-2 text-body text-navy-800",
+          "inline-flex items-center gap-2.5 text-body text-ink",
           disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
           className,
         )}
@@ -39,10 +37,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         <span
           aria-hidden="true"
           className={cn(
-            "inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 border-navy-300 bg-surface text-white",
-            "transition-colors duration-150",
-            "peer-checked:border-navy-900 peer-checked:bg-navy-900",
-            "peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-navy-900",
+            "inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2 border-border-strong bg-bone text-cream",
+            "transition-colors duration-200 ease-out",
+            "peer-checked:border-forest-900 peer-checked:bg-forest-900",
+            "peer-focus-visible:ring-3 peer-focus-visible:ring-sage/30",
             "peer-checked:[&>svg]:opacity-100",
           )}
         >

@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-// Uses native <details>/<summary>. Native gives correct keyboard + a11y
-// semantics out of the box (Space/Enter toggle, screen-reader discloses
-// state) with zero JS. The chevron rotates via open:rotate-180 on the
-// summary element's open state (Tailwind v4's `open:` modifier).
+// Native <details>/<summary>. Correct keyboard + a11y out of the box, zero
+// JS. Chevron rotates via Tailwind's `open:` modifier. The question is set
+// in the display serif per the editorial direction.
 
 export type AccordionItemProps = {
   question: string;
@@ -23,22 +22,22 @@ export function AccordionItem({
     <details
       open={defaultOpen}
       className={cn(
-        "group border-b border-navy-100 last:border-b-0",
+        "group border-b border-border last:border-b-0",
         className,
       )}
     >
       <summary
         className={cn(
-          "flex cursor-pointer list-none items-start justify-between gap-4 py-4 text-start",
-          "text-body-lg font-medium text-navy-900",
-          "hover:text-navy-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-900",
+          "flex cursor-pointer list-none items-start justify-between gap-4 py-5 text-start",
+          "font-display text-h4 font-medium text-ink",
+          "hover:text-ink-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30",
           "marker:hidden [&::-webkit-details-marker]:hidden",
         )}
       >
         <span>{question}</span>
-        <ChevronIcon className="mt-1 h-5 w-5 shrink-0 text-navy-500 transition-transform group-open:rotate-180" />
+        <ChevronIcon className="mt-1 h-5 w-5 shrink-0 text-ink-3 transition-transform duration-200 group-open:rotate-180" />
       </summary>
-      <div className="pb-5 text-body text-navy-700">{children}</div>
+      <div className="pb-6 text-body-lg text-ink-2">{children}</div>
     </details>
   );
 }
@@ -53,7 +52,7 @@ export function Accordion({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-lg border border-navy-100 bg-surface px-5",
+        "overflow-hidden rounded-lg border border-border bg-bone px-6",
         className,
       )}
     >

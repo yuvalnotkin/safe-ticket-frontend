@@ -1,10 +1,10 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-// White surface on the #FAFAFA background, thin border, subtle shadow.
-// `interactive` adds a hover lift for clickable cards (e.g. TicketCard).
-// Deliberately no padding token — callers pick their own inner spacing to
-// keep the component flexible (design_system.md: composition over wide props).
+// Bone surface sitting on the cream page bg, 1px warm-grey border, sparse
+// forest-tinted shadow. `interactive` opt-in for clickable cards — on hover
+// the border steps up to forest, a subtle 2px lift and deeper shadow.
+// Deliberately no padding token — callers own their inner spacing.
 
 export type CardProps = HTMLAttributes<HTMLDivElement> & {
   interactive?: boolean;
@@ -19,9 +19,9 @@ export function Card({
   return (
     <div
       className={cn(
-        "rounded-lg border border-navy-100 bg-surface shadow-sm",
+        "rounded-lg border border-border bg-bone shadow-xs",
         interactive &&
-          "transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md hover:border-navy-200",
+          "cursor-pointer transition-all duration-250 ease-out hover:-translate-y-0.5 hover:border-forest-900 hover:shadow-card-hover",
         className,
       )}
       {...rest}

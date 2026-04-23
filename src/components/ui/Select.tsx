@@ -1,10 +1,8 @@
 import { forwardRef, useId, type SelectHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-// Native <select> styled to match Input. Deliberately not a custom dropdown —
-// native selects are a11y-complete and behave correctly on mobile (iOS picker,
-// Android menu). The caret is drawn with a background-image so the control
-// reads as interactive on both light and dark surfaces.
+// Native <select> styled to match Input. Native is deliberate — a11y-complete
+// and renders correctly on mobile (iOS picker, Android menu).
 
 export type SelectOption<V extends string = string> = {
   value: V;
@@ -29,24 +27,24 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className="text-small font-medium text-navy-800"
+            className="text-caption font-medium text-ink-2"
           >
             {label}
           </label>
         )}
         <div
           className={cn(
-            "relative flex items-center rounded-md border border-navy-200 bg-surface",
-            "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-navy-900",
-            "hover:border-navy-300 focus-within:border-navy-900",
+            "relative flex items-center rounded-md border border-border bg-bone",
+            "transition-all duration-200 ease-out",
+            "hover:border-border-strong focus-within:border-forest-900 focus-within:ring-3 focus-within:ring-sage/30",
           )}
         >
           <select
             ref={ref}
             id={selectId}
             className={cn(
-              "h-11 w-full appearance-none bg-transparent ps-3 pe-10 text-body text-navy-900",
-              "outline-none disabled:cursor-not-allowed disabled:text-navy-400",
+              "h-11 w-full appearance-none bg-transparent ps-3 pe-10 text-body text-ink",
+              "outline-none disabled:cursor-not-allowed disabled:text-ink-3",
               className,
             )}
             {...rest}
@@ -59,7 +57,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           </select>
           <svg
             aria-hidden="true"
-            className="pointer-events-none absolute end-3 h-4 w-4 text-navy-500"
+            className="pointer-events-none absolute end-3 h-4 w-4 text-ink-3"
             viewBox="0 0 16 16"
             fill="none"
           >

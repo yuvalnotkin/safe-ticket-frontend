@@ -1,28 +1,35 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-// Pill-shaped inline indicators. Tone maps to the state palette.
-// `trust` gets its own tone (vs `success`) because the design system
-// reserves the brand green specifically for verification/trust signals —
-// not as a generic green highlight.
+// Pill / capsule inline indicators. `tone` maps to the state palette.
+// `verified` and `provider` are distinct tones so trust and attribution
+// don't collapse into generic green/neutral.
 
-type Tone = "neutral" | "trust" | "success" | "warning" | "danger";
+type Tone = "neutral" | "verified" | "face-value" | "success" | "warning" | "danger" | "info";
+type Shape = "pill" | "square";
 
 export type BadgeProps = HTMLAttributes<HTMLSpanElement> & {
   tone?: Tone;
+  shape?: Shape;
   leadingIcon?: ReactNode;
+  /** Uppercase + letter-spaced — for provider tags like TICKETMASTER, or lifecycle chips like IN ESCROW. */
+  mono?: boolean;
 };
 
 const TONE_CLASSES: Record<Tone, string> = {
-  neutral: "bg-navy-100 text-navy-800",
-  trust: "bg-green-100 text-green-800",
-  success: "bg-success-bg text-green-800",
-  warning: "bg-warning-bg text-warning",
+  neutral: "bg-cream-deep text-ink",
+  verified: "bg-success-bg text-sage border border-sage/30",
+  "face-value": "bg-forest-900 text-cream",
+  success: "bg-success-bg text-success",
+  warning: "bg-warning-bg text-ochre-deep",
   danger: "bg-danger-bg text-danger",
+  info: "bg-cream-deep text-ink-2",
 };
 
 export function Badge({
   tone = "neutral",
+  shape = "pill",
+  mono = false,
   leadingIcon,
   className,
   children,
@@ -31,8 +38,11 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-pill px-2.5 py-0.5",
-        "text-caption font-medium",
+        "inline-flex items-center gap-1.5 px-2.5 py-0.5",
+        shape === "pill" ? "rounded-pill" : "rounded-xs",
+        mono
+          ? "text-micro font-semibold tracking-[0.12em] uppercase"
+          : "text-caption font-medium",
         TONE_CLASSES[tone],
         className,
       )}

@@ -1,19 +1,21 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-// Thin border, outline focus (not glow), navy focus color — design_system.md §7.
-// Label + hint + error are first-class props so every form field has them by
-// construction and a11y (aria-describedby / aria-invalid) wires up automatically.
+// Bone-on-cream field with a 1px warm-grey border. Focus lifts to forest
+// border + a subtle sage ring (never a glow). Label + hint + error are
+// first-class props so a11y (aria-describedby, aria-invalid) wires up
+// automatically for every form field.
 
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
   label?: string;
   hint?: ReactNode;
   error?: string;
   leadingIcon?: ReactNode;
+  trailingSlot?: ReactNode;
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, hint, error, leadingIcon, id, className, ...rest },
+  { label, hint, error, leadingIcon, trailingSlot, id, className, ...rest },
   ref,
 ) {
   const generatedId = useId();
@@ -28,23 +30,23 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {label && (
         <label
           htmlFor={inputId}
-          className="text-small font-medium text-navy-800"
+          className="text-caption font-medium text-ink-2"
         >
           {label}
         </label>
       )}
       <div
         className={cn(
-          "flex items-center gap-2 rounded-md border bg-surface px-3",
-          "transition-colors duration-150",
-          "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-navy-900",
+          "flex items-center gap-2 rounded-md border bg-bone ps-3 pe-3",
+          "transition-all duration-200 ease-out",
+          "focus-within:ring-3 focus-within:ring-sage/30",
           error
             ? "border-danger"
-            : "border-navy-200 hover:border-navy-300 focus-within:border-navy-900",
+            : "border-border hover:border-border-strong focus-within:border-forest-900",
         )}
       >
         {leadingIcon && (
-          <span className="text-navy-400" aria-hidden="true">
+          <span className="text-ink-3" aria-hidden="true">
             {leadingIcon}
           </span>
         )}
@@ -54,20 +56,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           className={cn(
-            "h-11 flex-1 bg-transparent text-body text-navy-900 placeholder:text-navy-400",
-            "outline-none disabled:cursor-not-allowed disabled:text-navy-400",
+            "h-11 flex-1 bg-transparent text-body text-ink placeholder:text-ink-3",
+            "outline-none disabled:cursor-not-allowed disabled:text-ink-3",
             className,
           )}
           {...rest}
         />
+        {trailingSlot}
       </div>
       {hint && !error && (
-        <p id={hintId} className="text-small text-navy-500">
+        <p id={hintId} className="text-caption text-ink-3">
           {hint}
         </p>
       )}
       {error && (
-        <p id={errorId} className="text-small text-danger">
+        <p id={errorId} className="text-caption text-danger">
           {error}
         </p>
       )}
