@@ -144,15 +144,17 @@ function WhySafe() {
     t("trust.whySafeTransfer"),
     t("trust.whySafeEscrow"),
   ];
+  // Forest tundra block — the trust promise is the emotional center of
+  // the page, so it gets the dark-break treatment (design_system.md §3).
   return (
-    <section className="rounded-lg border border-border bg-cream-deep p-6">
-      <h2 className="font-display text-h3 font-medium text-forest-900">
+    <section className="rounded-lg bg-forest-900 p-8 text-cream">
+      <h2 className="font-display text-h2 font-medium text-cream">
         {t("trust.whySafeTitle")}
       </h2>
-      <ul className="mt-4 flex flex-col gap-3">
+      <ul className="mt-5 flex flex-col gap-3">
         {points.map((point) => (
-          <li key={point} className="flex gap-3 text-body text-ink-2">
-            <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-sage" />
+          <li key={point} className="flex gap-3 text-body text-ink-on-dark-2">
+            <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-sage-soft" />
             <span>{point}</span>
           </li>
         ))}

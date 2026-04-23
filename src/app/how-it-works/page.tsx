@@ -34,22 +34,26 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="bg-bone border-y border-border py-24 md:py-32">
+      {/* Tundra section per design_system.md §3 — deep-green dark break,
+          big serif numbers + headlines in cream on forest. */}
+      <section className="bg-forest-900 py-24 text-cream md:py-32">
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-12">
           <ol className="flex flex-col gap-6">
             {steps.map((s, i) => (
               <li
                 key={s.key}
-                className="grid gap-5 border-t border-forest-900 pt-8 md:grid-cols-[80px_1fr] md:gap-10"
+                className="grid gap-5 border-t border-cream/20 pt-8 md:grid-cols-[80px_1fr] md:gap-10"
               >
-                <div className="font-display text-display-md font-medium leading-none text-forest-900">
+                <div className="font-display text-display-md font-medium leading-none text-sage-soft">
                   {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="flex flex-col gap-3">
-                  <h2 className="font-display text-h2 font-medium leading-tight text-ink">
+                  <h2 className="font-display text-h2 font-medium leading-tight text-cream">
                     {s.title}
                   </h2>
-                  <p className="max-w-[68ch] text-body-lg text-ink-2">{s.body}</p>
+                  <p className="max-w-[68ch] text-body-lg text-ink-on-dark-2">
+                    {s.body}
+                  </p>
                 </div>
               </li>
             ))}

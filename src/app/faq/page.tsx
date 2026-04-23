@@ -19,15 +19,19 @@ export default function FaqPage() {
 
   return (
     <>
-      <section className="bg-cream">
+      {/* Tundra hero — forest block so the editorial accordion below reads
+          as the natural content area after a strong brand statement. */}
+      <section className="bg-forest-900 text-cream">
         <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-5 px-6 py-24 md:px-12 md:py-28">
-          <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
+          <span className="text-micro font-medium uppercase tracking-[0.12em] text-sage-soft">
             {t("nav.faq")}
           </span>
-          <h1 className="font-display text-display-lg font-medium leading-tight text-ink">
+          <h1 className="font-display text-display-lg font-medium leading-tight text-cream">
             {t("faq.title")}
           </h1>
-          <p className="max-w-[680px] text-body-lg text-ink-2">{t("faq.intro")}</p>
+          <p className="max-w-[680px] text-body-lg text-ink-on-dark-2">
+            {t("faq.intro")}
+          </p>
         </div>
       </section>
       <section className="bg-bone border-y border-border py-16 md:py-20">
