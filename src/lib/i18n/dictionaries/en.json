@@ -115,7 +115,19 @@
     "howItWorksStep3Body": "The ticket reaches you through the provider. Once confirmed, the seller is paid.",
     "providersIntro": "Supported providers",
     "ctaBrowse": "Browse tickets",
-    "refundNote": "Post-transfer refunds are handled by the original ticket provider."
+    "refundNote": "Post-transfer refunds are handled by the original ticket provider.",
+    "featuredEyebrow": "Featured tickets",
+    "featuredTitle": "Shows and matches waiting for you",
+    "featuredSub": "A sample of the events currently live — every ticket verified with the official provider.",
+    "featuredViewAll": "See all tickets",
+    "testimonialEyebrow": "What buyers say",
+    "testimonialQuote": "Bought Maccabi Tel Aviv tickets through Safe Ticket. Everything moved through Ticketmaster exactly as promised — no PDFs, no WhatsApp. The small fee was worth it many times over, just for the peace of mind.",
+    "testimonialAuthor": "Jonathan M.",
+    "testimonialContext": "Buyer in Tel Aviv · funds released 24h after the event",
+    "sellerEyebrow": "Got a spare ticket?",
+    "sellerTitle": "List it at face value.\nNot a shekel more.",
+    "sellerBody": "Connect your provider account, pick the event, and list it in minutes. Safe Ticket reads the original price, confirms the ticket is yours, and handles the transfer.",
+    "sellerCta": "List a ticket"
   },
   "footer": {
     "tagline": "Israel's safe secondary marketplace for verified tickets.",
