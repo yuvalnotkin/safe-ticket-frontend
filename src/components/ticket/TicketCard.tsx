@@ -27,7 +27,14 @@ const TICKET_IMAGE: Record<string, string> = {
   "t-001": "/images/basketball.jpg",
   "t-013": "/images/basketball.jpg",
   "t-003": "/images/IMG_2189.jpeg",
+  "t-004": "/images/IMG_2192.jpeg",
   "t-006": "/images/IMG_2191.jpeg",
+  "t-008": "/images/IMG_2195.jpeg",
+  "t-010": "/images/IMG_2197.jpeg",
+  "t-011": "/images/IMG_2193.jpeg",
+  "t-012": "/images/IMG_2196.jpeg",
+  "t-014": "/images/IMG_2198.jpeg",
+  "t-016": "/images/IMG_2194.jpeg",
 };
 
 function imageFor(ticket: Ticket): { src?: string; gradient?: string } {
