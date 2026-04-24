@@ -123,12 +123,12 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
         <div className="flex items-end justify-between gap-3 border-t border-border pt-4">
           <div className="flex flex-col gap-0.5">
-            <span className="text-micro font-medium uppercase tracking-[0.12em] text-sage">
+            <span className="text-micro uppercase tracking-[0.08em] text-ink-3">
               {t("price.faceValue")}
             </span>
             <span
               data-numeric
-              className="font-display text-h3 text-ink"
+              className="text-body font-medium text-ink-2"
             >
               {currency.format(ticket.price.faceValue)}
             </span>
