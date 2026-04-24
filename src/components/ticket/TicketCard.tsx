@@ -26,6 +26,7 @@ const CATEGORY_GRADIENT: Record<Ticket["event"]["category"], string> = {
 const TICKET_IMAGE: Record<string, string> = {
   "t-001": "/images/basketball.jpg",
   "t-013": "/images/basketball.jpg",
+  "t-003": "/images/IMG_2189.jpeg",
 };
 
 function imageFor(ticket: Ticket): { src?: string; gradient?: string } {
