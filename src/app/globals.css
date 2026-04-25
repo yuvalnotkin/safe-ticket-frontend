@@ -64,12 +64,12 @@
   --color-danger-bg: #f2dfdb;
 
   /* ----- Fonts — Hebrew-first typefaces -------------------------------- */
-  /* Frank Ruhl Libre = editorial serif display. Rubik = geometric sans. Both
-     are native Hebrew faces with strong Latin coverage. Loaded via next/font
+  /* Alef = Hebrew-first sans display. Rubik = geometric sans. Both are
+     native Hebrew faces with strong Latin coverage. Loaded via next/font
      in layout.tsx. */
   --font-sans: var(--font-body);
   --font-body: var(--font-rubik), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-frank-ruhl-libre), ui-serif, Georgia, serif;
+  --font-display: var(--font-alef), ui-sans-serif, system-ui, sans-serif;
 
   /* ----- Type scale ---------------------------------------------------- */
   /* Large-leaning by design — the aesthetic calls for generous headlines. */

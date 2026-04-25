@@ -98,7 +98,7 @@ function Row({
       <span
         className={cn(
           "text-body",
-          total
+          total || emphasized
             ? "font-medium text-ink"
             : muted
               ? "text-ink-3"
@@ -113,7 +113,7 @@ function Row({
           total
             ? "font-display text-h2 font-medium text-ink"
             : emphasized
-              ? "font-display text-h3 text-ink"
+              ? "font-display text-h3 font-medium text-ink"
               : "font-body text-body-lg text-ink-3",
         )}
       >

@@ -47,6 +47,16 @@ export default function Home() {
   );
 }
 
+// Hero quick-search chips. Query stays in Hebrew because mock event
+// data is Hebrew-only; the label switches per active language so the
+// English UI doesn't leak Hebrew strings.
+const HERO_CHIPS = [
+  { query: "מכבי תל אביב", he: "מכבי תל אביב", en: "Maccabi Tel Aviv" },
+  { query: "הפועל", he: "הפועל", en: "Hapoel" },
+  { query: "עומר אדם", he: "עומר אדם", en: "Omer Adam" },
+  { query: "שלמה ארצי", he: "שלמה ארצי", en: "Shlomo Artzi" },
+] as const;
+
 function Hero({
   query,
   setQuery,
@@ -56,7 +66,7 @@ function Hero({
   setQuery: (v: string) => void;
   onSubmit: (e: FormEvent) => void;
 }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   return (
     <section className="bg-cream">
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-14 px-6 py-20 md:px-12 md:py-28 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
@@ -129,16 +139,15 @@ function Hero({
                 </button>
               </form>
               <div className="flex flex-wrap gap-2">
-                {(["מכבי תל אביב", "הפועל", "עומר אדם", "שלמה ארצי"] as const).map(
-                  (chip) => (
-                    <span
-                      key={chip}
-                      className="rounded-pill border border-border-on-dark bg-white/10 px-3 py-1.5 text-caption text-ink-on-dark-2"
-                    >
-                      {chip}
-                    </span>
-                  ),
-                )}
+                {HERO_CHIPS.map((chip) => (
+                  <Link
+                    key={chip.query}
+                    href={`/search?q=${encodeURIComponent(chip.query)}`}
+                    className="rounded-pill border border-border-on-dark bg-white/10 px-3 py-1.5 text-caption text-ink-on-dark-2 transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage/40"
+                  >
+                    {language === "he" ? chip.he : chip.en}
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

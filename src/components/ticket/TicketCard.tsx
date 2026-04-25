@@ -26,6 +26,15 @@ const CATEGORY_GRADIENT: Record<Ticket["event"]["category"], string> = {
 const TICKET_IMAGE: Record<string, string> = {
   "t-001": "/images/basketball.jpg",
   "t-013": "/images/basketball.jpg",
+  "t-003": "/images/IMG_2189.jpeg",
+  "t-004": "/images/IMG_2192.jpeg",
+  "t-006": "/images/IMG_2191.jpeg",
+  "t-008": "/images/IMG_2195.jpeg",
+  "t-010": "/images/IMG_2197.jpeg",
+  "t-011": "/images/IMG_2193.jpeg",
+  "t-012": "/images/IMG_2196.jpeg",
+  "t-014": "/images/IMG_2198.jpeg",
+  "t-016": "/images/IMG_2194.jpeg",
 };
 
 function imageFor(ticket: Ticket): { src?: string; gradient?: string } {
@@ -123,12 +132,12 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
         <div className="flex items-end justify-between gap-3 border-t border-border pt-4">
           <div className="flex flex-col gap-0.5">
-            <span className="text-micro font-medium uppercase tracking-[0.12em] text-sage">
+            <span className="text-micro uppercase tracking-[0.08em] text-ink-3">
               {t("price.faceValue")}
             </span>
             <span
               data-numeric
-              className="font-display text-h3 text-ink"
+              className="text-body font-medium text-ink-2"
             >
               {currency.format(ticket.price.faceValue)}
             </span>
