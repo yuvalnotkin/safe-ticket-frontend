@@ -74,9 +74,13 @@ function Hero({
           <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
             {t("home.eyebrow")}
           </span>
-          <h1 className="font-display text-display-lg font-medium leading-[1.02] text-ink">
-            {t("home.heroTitle")}
+          <h1 className="text-center font-display text-display-xl font-medium leading-[1.02] text-ink">
+            {t("home.heroTagline")}
           </h1>
+          <p className="max-w-[560px] font-display text-h2 font-medium leading-tight text-ink">
+            {t("home.heroTitle")}
+          </p>
+          <span aria-hidden="true" className="block h-px w-12 bg-sage" />
           <p className="max-w-[560px] text-body-lg text-ink-2">
             {t("home.heroSubtitle")}
           </p>
