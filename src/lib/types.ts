@@ -29,3 +29,46 @@ export type Ticket = {
   };
   provider: TicketProvider;
 };
+
+// --- Phase 2 contract-aligned types ---
+
+export type Listing = Ticket; // alias for contract terminology; same runtime shape
+
+export type Session = {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: number; // unix epoch seconds
+};
+
+export type User = {
+  id: string;
+  email: string;
+  displayName: string;
+  phone: string | null;
+  avatarUrl: string | null;
+  createdAt: string; // ISO 8601
+  updatedAt: string; // ISO 8601
+};
+
+export type Profile = User; // /users/me/profile returns same shape as /auth/me
+
+export type ListingsQuery = {
+  q?: string;
+  category?: "sports" | "culture";
+  cities?: ReadonlyArray<string>;
+  providers?: ReadonlyArray<TicketProvider>;
+  dateFrom?: string; // YYYY-MM-DD
+  dateTo?: string;   // YYYY-MM-DD
+  minPriceAgorot?: number;
+  maxPriceAgorot?: number;
+  sort?: "soonest" | "lowestPrice" | "newest";
+  page?: number;
+  limit?: number;
+};
+
+export type ListingsResponse = {
+  items: Listing[];
+  page: number;
+  limit: number;
+  total: number;
+};
