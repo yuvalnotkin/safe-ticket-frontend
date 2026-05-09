@@ -37,7 +37,8 @@ See API_CONTRACT.md for all backend endpoints.
 ## Rules
 - Mobile-first responsive design
 - All prices show face value + service fee separately — NEVER combined
-- Money values from the API are integers in **agorot** (1 ILS = 100 agorot). Field names end with `Agorot`. Convert at the display layer, never store floats. Phase-1 mocks still use whole shekels — the type/adapter swap is on the Phase 2 checklist (`API_CONTRACT.md` is canonical)
+- Money values from the API are integers in **agorot** (1 ILS = 100 agorot). Field names end with `Agorot`. Convert at the display layer, never store floats. Buyer service fee is 10% of face value, integer-truncated. Phase-1 mocks still use whole shekels — the type/adapter swap is on the Phase 2 checklist (`API_CONTRACT.md` is canonical)
+- Provider IDs in the API contract are `eventim_il | hala | leaan | tmura` (and grow as connectors are added). Phase-1 `src/lib/types.ts` still has the old `ticketmaster | leaan | eventim | hadran` union and the mocks reference those — known divergence, swap as part of frontend Phase 2 alongside the agorot work
 - Every ticket card shows verification badge
 - Ticket price is NEVER editable by seller
 - Buyer purchases a specific seat, not a category
