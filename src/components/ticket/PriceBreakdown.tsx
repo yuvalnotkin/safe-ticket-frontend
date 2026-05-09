@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { formatPriceILS } from "@/lib/money";
 
 // Face value, service fee, and total are ALWAYS shown separately (CLAUDE.md
 // + design_system.md). The editorial direction uses serif (Frank Ruhl Libre)
@@ -10,29 +11,23 @@ import { useLanguage } from "@/lib/i18n/LanguageProvider";
 // line up visually in dense lists.
 
 export type PriceBreakdownProps = {
-  faceValue: number;
-  serviceFee: number;
+  faceValueAgorot: number;
+  serviceFeeAgorot: number;
   /** `compact` is a one-line summary for cards; `full` is the expanded view for the details page. */
   variant?: "compact" | "full";
   className?: string;
 };
 
-function formatShekels(value: number, language: string): string {
-  return new Intl.NumberFormat(language === "he" ? "he-IL" : "en-US", {
-    style: "currency",
-    currency: "ILS",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
 export function PriceBreakdown({
-  faceValue,
-  serviceFee,
+  faceValueAgorot,
+  serviceFeeAgorot,
   variant = "full",
   className,
 }: PriceBreakdownProps) {
   const { t, language } = useLanguage();
-  const total = faceValue + serviceFee;
+  const totalAgorot = faceValueAgorot + serviceFeeAgorot;
+  const fmt = (agorot: number) =>
+    formatPriceILS(agorot, language === "he" ? "he-IL" : "en-US");
 
   if (variant === "compact") {
     return (
@@ -44,10 +39,10 @@ export function PriceBreakdown({
           data-numeric
           className="font-display text-h3 font-medium text-ink"
         >
-          {formatShekels(faceValue, language)}
+          {fmt(faceValueAgorot)}
         </span>
         <span className="text-caption text-ink-3" data-numeric>
-          +{formatShekels(serviceFee, language)} {t("price.serviceFee")}
+          +{fmt(serviceFeeAgorot)} {t("price.serviceFee")}
         </span>
       </div>
     );
@@ -62,18 +57,18 @@ export function PriceBreakdown({
     >
       <Row
         label={t("price.faceValue")}
-        value={formatShekels(faceValue, language)}
+        value={fmt(faceValueAgorot)}
         emphasized
       />
       <Row
         label={t("price.serviceFee")}
-        value={formatShekels(serviceFee, language)}
+        value={fmt(serviceFeeAgorot)}
         muted
       />
       <div className="my-1 border-t border-border" />
       <Row
         label={t("price.total")}
-        value={formatShekels(total, language)}
+        value={fmt(totalAgorot)}
         total
       />
     </div>

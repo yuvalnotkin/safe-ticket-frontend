@@ -6,6 +6,7 @@ import { VerificationBadge } from "./VerificationBadge";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Ticket } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { formatPriceILS } from "@/lib/money";
 
 // Editorial event card. Photo (or category gradient) fills the top 16:10
 // region with a category pill + date caption + gradient protection for
@@ -61,11 +62,9 @@ export function TicketCard({ ticket }: TicketCardProps) {
     { hour: "2-digit", minute: "2-digit" },
   ).format(eventDate);
 
-  const total = ticket.price.faceValue + ticket.price.serviceFee;
-  const currency = new Intl.NumberFormat(
-    language === "he" ? "he-IL" : "en-US",
-    { style: "currency", currency: "ILS", maximumFractionDigits: 0 },
-  );
+  const totalAgorot = ticket.price.faceValueAgorot + ticket.price.serviceFeeAgorot;
+  const fmtPrice = (agorot: number) =>
+    formatPriceILS(agorot, language === "he" ? "he-IL" : "en-US");
 
   return (
     <Link
@@ -117,7 +116,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
         <div className="flex items-center justify-between gap-3">
           <VerificationBadge />
           <Badge tone="info" mono>
-            {ticket.provider}
+            {t(`providerName.${ticket.provider}`)}
           </Badge>
         </div>
 
@@ -139,7 +138,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
               data-numeric
               className="text-body font-medium text-ink-2"
             >
-              {currency.format(ticket.price.faceValue)}
+              {fmtPrice(ticket.price.faceValueAgorot)}
             </span>
           </div>
           <div className="flex flex-col items-end gap-0.5">
@@ -147,7 +146,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
               {t("price.total")}
             </span>
             <span className="text-body font-medium text-ink-2" data-numeric>
-              {currency.format(total)}
+              {fmtPrice(totalAgorot)}
             </span>
           </div>
         </div>

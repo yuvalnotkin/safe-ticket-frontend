@@ -4,13 +4,14 @@
 export type EventCategory = "sports" | "culture";
 
 export type TicketProvider =
-  | "ticketmaster"
+  | "eventim_il"
+  | "hala"
   | "leaan"
-  | "eventim"
-  | "hadran";
+  | "tmura";
 
 export type Ticket = {
   id: string;
+  status?: "active" | "sold" | "cancelled" | "expired";
   event: {
     name: string;
     date: string; // ISO 8601
@@ -24,10 +25,11 @@ export type Ticket = {
     seat?: string;
   };
   price: {
-    faceValue: number;  // shekels, whole number
-    serviceFee: number; // shekels, whole number
+    faceValueAgorot: number;
+    serviceFeeAgorot: number;
   };
   provider: TicketProvider;
+  createdAt?: string; // ISO 8601 — present on API responses, optional on mocks
 };
 
 // --- Phase 2 contract-aligned types ---

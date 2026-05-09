@@ -70,10 +70,10 @@
     "culture": "Culture"
   },
   "providerName": {
-    "ticketmaster": "Ticketmaster",
+    "eventim_il": "Eventim Israel",
+    "hala": "Hala",
     "leaan": "Le'an",
-    "eventim": "Eventim",
-    "hadran": "Hadran"
+    "tmura": "Tmura"
   },
   "nav": {
     "browse": "Browse tickets",
