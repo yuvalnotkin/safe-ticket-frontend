@@ -104,8 +104,8 @@ You have the Superpowers skill set. Use the relevant skills proactively:
 
 ## Known Divergences (close as Phase 2 frontend ships)
 
-- **Money in shekels vs. agorot.** Phase-1 mocks use whole shekels (`price.faceValue: number`). The contract uses agorot integers (`faceValueAgorot`, `serviceFeeAgorot`). Type swap + display helpers land in Phase 2 segment 1; mocks die in segment 2.
-- **Provider union outdated.** Phase-1 `src/lib/types.ts` has `ticketmaster | leaan | eventim | hadran`. The contract has `eventim_il | hala | leaan | tmura`. Swap lands in Phase 2 segment 1 alongside the agorot work.
+- **Money in shekels vs. agorot.** Phase-1 mocks use whole shekels (`price.faceValue: number`). The contract uses agorot integers (`faceValueAgorot`, `serviceFeeAgorot`). Type swap + display helpers land in Phase 2 segment 1; mocks die in segment 2. S1 (this branch) added the contract-aligned types and `formatPriceILS` helper; full closeout is at S2 when pages stop importing mocks.
+- **Provider union outdated.** Phase-1 `src/lib/types.ts` has `ticketmaster | leaan | eventim | hadran`. The contract has `eventim_il | hala | leaan | tmura`. Swap lands in Phase 2 segment 1 alongside the agorot work. S1 (this branch) added the contract-aligned types and `formatPriceILS` helper; full closeout is at S2 when pages stop importing mocks.
 
 When these divergences fully close (Phase 2 segment 2 merges), strike both bullets through with the date and the closing commit reference rather than deleting them — the historical record matters.
 
