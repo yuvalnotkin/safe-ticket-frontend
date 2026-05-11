@@ -63,7 +63,7 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
             <div className="flex flex-wrap items-center gap-3">
               <VerificationBadge />
               <Badge tone="info" mono>
-                {ticket.provider}
+                {t(`providerName.${ticket.provider}`)}
               </Badge>
               <Badge tone="neutral">
                 {t(`category.${ticket.event.category}`)}
@@ -101,8 +101,8 @@ export function TicketDetails({ ticket }: { ticket: Ticket }) {
         <aside className="flex flex-col gap-4 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-24 lg:self-start">
           <Card className="flex flex-col gap-5 p-6">
             <PriceBreakdown
-              faceValue={ticket.price.faceValue}
-              serviceFee={ticket.price.serviceFee}
+              faceValueAgorot={ticket.price.faceValueAgorot}
+              serviceFeeAgorot={ticket.price.serviceFeeAgorot}
               variant="full"
             />
             <Button variant="cta" size="lg" onClick={handleBuy}>

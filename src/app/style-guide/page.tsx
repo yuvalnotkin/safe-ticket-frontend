@@ -23,7 +23,7 @@ const SAMPLE_TICKET: Ticket = {
     category: "sports",
   },
   seat: { section: "103", row: "H", seat: "22" },
-  price: { faceValue: 240, serviceFee: 18 },
+  price: { faceValueAgorot: 24000, serviceFeeAgorot: 1800 },
   provider: "leaan",
 };
 
@@ -173,15 +173,15 @@ export default function StyleGuidePage() {
           <StateGroup label="PriceBreakdown — compact">
             <div className="rounded-md border border-border bg-bone p-5">
               <PriceBreakdown
-                faceValue={240}
-                serviceFee={18}
+                faceValueAgorot={24000}
+                serviceFeeAgorot={1800}
                 variant="compact"
               />
             </div>
           </StateGroup>
           <StateGroup label="PriceBreakdown — full">
             <div className="max-w-sm">
-              <PriceBreakdown faceValue={240} serviceFee={18} variant="full" />
+              <PriceBreakdown faceValueAgorot={24000} serviceFeeAgorot={1800} variant="full" />
             </div>
           </StateGroup>
           <StateGroup label="TicketCard">

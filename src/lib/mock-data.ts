@@ -2,12 +2,13 @@ import type { Ticket } from "./types";
 
 // Sprint 1.2 fixture. 16 realistic Israeli listings — mixed sports + culture,
 // spread across May–August 2026, varied cities, providers, and price bands
-// so filters and sort have something to chew on. Shape deliberately matches
-// what a future API response would plausibly return; do not over-engineer.
+// so filters and sort have something to chew on. Shape matches the contract:
+// money in agorot integers, provider IDs from the canonical union.
 
 export const MOCK_TICKETS: Ticket[] = [
   {
     id: "t-001",
+    status: "active",
     event: {
       name: "מכבי תל אביב — הפועל באר שבע",
       date: "2026-05-04T20:15:00+03:00",
@@ -16,11 +17,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "103", row: "H", seat: "22" },
-    price: { faceValue: 240, serviceFee: 18 },
+    price: { faceValueAgorot: 24000, serviceFeeAgorot: 1800 },
     provider: "leaan",
   },
   {
     id: "t-002",
+    status: "active",
     event: {
       name: "הפועל תל אביב — מכבי חיפה",
       date: "2026-05-09T19:30:00+03:00",
@@ -29,11 +31,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "מערב", row: "12", seat: "8" },
-    price: { faceValue: 180, serviceFee: 14 },
-    provider: "ticketmaster",
+    price: { faceValueAgorot: 18000, serviceFeeAgorot: 1400 },
+    provider: "eventim_il",
   },
   {
     id: "t-003",
+    status: "active",
     event: {
       name: "עומר אדם — המופע הגדול",
       date: "2026-06-12T21:00:00+03:00",
@@ -42,11 +45,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "פרקט", row: "5", seat: "14" },
-    price: { faceValue: 450, serviceFee: 32 },
-    provider: "eventim",
+    price: { faceValueAgorot: 45000, serviceFeeAgorot: 3200 },
+    provider: "eventim_il",
   },
   {
     id: "t-004",
+    status: "active",
     event: {
       name: "עברי לידר — הופעה אקוסטית",
       date: "2026-05-22T20:30:00+03:00",
@@ -55,11 +59,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "יציע מרכזי", row: "9", seat: "17" },
-    price: { faceValue: 320, serviceFee: 24 },
-    provider: "hadran",
+    price: { faceValueAgorot: 32000, serviceFeeAgorot: 2400 },
+    provider: "hala",
   },
   {
     id: "t-005",
+    status: "active",
     event: {
       name: "נבחרת ישראל — רומניה",
       date: "2026-06-06T20:45:00+03:00",
@@ -68,11 +73,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "דרום", row: "24", seat: "3" },
-    price: { faceValue: 290, serviceFee: 21 },
-    provider: "ticketmaster",
+    price: { faceValueAgorot: 29000, serviceFeeAgorot: 2100 },
+    provider: "eventim_il",
   },
   {
     id: "t-006",
+    status: "active",
     event: {
       name: "שלמה ארצי — קיסריה 2026",
       date: "2026-07-18T21:00:00+03:00",
@@ -81,11 +87,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "בלוק ב'", row: "14", seat: "31" },
-    price: { faceValue: 520, serviceFee: 38 },
+    price: { faceValueAgorot: 52000, serviceFeeAgorot: 3800 },
     provider: "leaan",
   },
   {
     id: "t-007",
+    status: "active",
     event: {
       name: "בית\"ר ירושלים — מכבי תל אביב",
       date: "2026-05-16T20:00:00+03:00",
@@ -94,11 +101,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "מזרח", row: "7", seat: "19" },
-    price: { faceValue: 165, serviceFee: 12 },
-    provider: "hadran",
+    price: { faceValueAgorot: 16500, serviceFeeAgorot: 1200 },
+    provider: "hala",
   },
   {
     id: "t-008",
+    status: "active",
     event: {
       name: "סטטיק ובן אל תבורי",
       date: "2026-06-28T20:30:00+03:00",
@@ -107,11 +115,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "כרטיס כניסה", row: "—", seat: "—" },
-    price: { faceValue: 395, serviceFee: 29 },
-    provider: "eventim",
+    price: { faceValueAgorot: 39500, serviceFeeAgorot: 2900 },
+    provider: "eventim_il",
   },
   {
     id: "t-009",
+    status: "active",
     event: {
       name: "הפועל ירושלים — הפועל תל אביב",
       date: "2026-05-01T20:00:00+03:00",
@@ -120,11 +129,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "201", row: "C", seat: "11" },
-    price: { faceValue: 210, serviceFee: 16 },
+    price: { faceValueAgorot: 21000, serviceFeeAgorot: 1600 },
     provider: "leaan",
   },
   {
     id: "t-010",
+    status: "active",
     event: {
       name: "נטע ברזילי — הופעה מיוחדת",
       date: "2026-07-04T21:30:00+03:00",
@@ -133,11 +143,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "יציע עליון", row: "22", seat: "5" },
-    price: { faceValue: 380, serviceFee: 28 },
-    provider: "ticketmaster",
+    price: { faceValueAgorot: 38000, serviceFeeAgorot: 2800 },
+    provider: "tmura",
   },
   {
     id: "t-011",
+    status: "active",
     event: {
       name: "הבימה — המלך ליר",
       date: "2026-05-27T20:00:00+03:00",
@@ -146,11 +157,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "אולם מרכזי", row: "8", seat: "12" },
-    price: { faceValue: 275, serviceFee: 20 },
-    provider: "hadran",
+    price: { faceValueAgorot: 27500, serviceFeeAgorot: 2000 },
+    provider: "hala",
   },
   {
     id: "t-012",
+    status: "active",
     event: {
       name: "התזמורת הפילהרמונית הישראלית",
       date: "2026-06-19T20:00:00+03:00",
@@ -159,11 +171,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "תא 14", row: "2", seat: "4" },
-    price: { faceValue: 340, serviceFee: 25 },
-    provider: "hadran",
+    price: { faceValueAgorot: 34000, serviceFeeAgorot: 2500 },
+    provider: "hala",
   },
   {
     id: "t-013",
+    status: "active",
     event: {
       name: "מכבי תל אביב — ריאל מדריד",
       date: "2026-05-14T21:05:00+03:00",
@@ -172,11 +185,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "101", row: "B", seat: "6" },
-    price: { faceValue: 720, serviceFee: 52 },
+    price: { faceValueAgorot: 72000, serviceFeeAgorot: 5200 },
     provider: "leaan",
   },
   {
     id: "t-014",
+    status: "active",
     event: {
       name: "חנן בן ארי — אמפי בעברית",
       date: "2026-08-02T21:00:00+03:00",
@@ -185,11 +199,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "בלוק ד'", row: "9", seat: "18" },
-    price: { faceValue: 410, serviceFee: 30 },
+    price: { faceValueAgorot: 41000, serviceFeeAgorot: 3000 },
     provider: "leaan",
   },
   {
     id: "t-015",
+    status: "active",
     event: {
       name: "הפועל באר שבע — מכבי תל אביב",
       date: "2026-05-30T20:00:00+03:00",
@@ -198,11 +213,12 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "sports",
     },
     seat: { section: "צפון", row: "16", seat: "24" },
-    price: { faceValue: 155, serviceFee: 12 },
-    provider: "ticketmaster",
+    price: { faceValueAgorot: 15500, serviceFeeAgorot: 1200 },
+    provider: "tmura",
   },
   {
     id: "t-016",
+    status: "active",
     event: {
       name: "קמרי — אבני דרך",
       date: "2026-06-03T20:30:00+03:00",
@@ -211,8 +227,8 @@ export const MOCK_TICKETS: Ticket[] = [
       category: "culture",
     },
     seat: { section: "אולם א'", row: "11", seat: "7" },
-    price: { faceValue: 260, serviceFee: 19 },
-    provider: "eventim",
+    price: { faceValueAgorot: 26000, serviceFeeAgorot: 1900 },
+    provider: "eventim_il",
   },
 ];
 

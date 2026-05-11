@@ -74,9 +74,11 @@ export function filterTickets(
       if (f.dateTo && eventDay > f.dateTo) return false;
     }
 
-    const total = t.price.faceValue + t.price.serviceFee;
-    if (f.minPrice !== null && total < f.minPrice) return false;
-    if (f.maxPrice !== null && total > f.maxPrice) return false;
+    // f.minPrice / f.maxPrice come from the FilterPanel as shekels (the input
+    // field shows a ₪ prefix). Convert to agorot to compare against the total.
+    const totalAgorot = t.price.faceValueAgorot + t.price.serviceFeeAgorot;
+    if (f.minPrice !== null && totalAgorot < f.minPrice * 100) return false;
+    if (f.maxPrice !== null && totalAgorot > f.maxPrice * 100) return false;
 
     return true;
   });
@@ -96,9 +98,9 @@ export function sortTickets(
     case "lowestPrice":
       return copy.sort(
         (a, b) =>
-          a.price.faceValue +
-          a.price.serviceFee -
-          (b.price.faceValue + b.price.serviceFee),
+          a.price.faceValueAgorot +
+          a.price.serviceFeeAgorot -
+          (b.price.faceValueAgorot + b.price.serviceFeeAgorot),
       );
     case "newest":
       // No listedAt timestamp in the mock data. As a proxy, sort by ID

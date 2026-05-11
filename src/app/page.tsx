@@ -375,7 +375,7 @@ function SellerCta() {
 
 function ProvidersStrip() {
   const { t } = useLanguage();
-  const providers = ["ticketmaster", "leaan", "eventim", "hadran"] as const;
+  const providers = ["eventim_il", "hala", "leaan", "tmura"] as const;
   return (
     <section className="bg-cream py-14">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-6 md:flex-row md:items-center md:gap-12 md:px-12">
