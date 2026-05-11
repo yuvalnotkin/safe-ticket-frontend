@@ -14,7 +14,10 @@
     "continue": "Continue",
     "comingSoon": "Coming soon",
     "notYetAvailable": "Not yet available",
-    "or": "or"
+    "or": "or",
+    "retry": "Try again",
+    "previous": "Previous",
+    "next": "Next"
   },
   "trust": {
     "verified": "Verified",
@@ -62,7 +65,12 @@
     "timelineStep4Body": "Only after you've confirmed receipt, the seller gets paid.",
     "stateDone": "Done",
     "stateCurrent": "In progress",
-    "stateUpcoming": "Upcoming"
+    "stateUpcoming": "Upcoming",
+    "notFoundTitle": "Ticket not found",
+    "notFoundBody": "This ticket is no longer available — it may have been sold or removed. Try browsing other tickets.",
+    "errorTitle": "Couldn't load ticket",
+    "errorBody": "There may be a connection problem. Try again.",
+    "backToSearch": "Back to search"
   },
   "category": {
     "all": "All",
@@ -157,7 +165,10 @@
     "clearFilters": "Clear filters",
     "openFiltersMobile": "Filters",
     "applyFilters": "Show results",
-    "activeFilters": "Active filters"
+    "activeFilters": "Active filters",
+    "errorTitle": "Couldn't load tickets",
+    "errorBody": "There may be a connection problem or the server is unavailable right now. Try again.",
+    "pageOf": "Page {page} of {total}"
   },
   "filters": {
     "title": "Filters",

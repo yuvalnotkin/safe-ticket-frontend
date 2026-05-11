@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { TicketCard } from "@/components/ticket/TicketCard";
-import { MOCK_TICKETS } from "@/lib/mock-data";
+import { TicketCardSkeleton } from "@/components/search/TicketCardSkeleton";
+import { listListings } from "@/lib/api";
+import type { Listing } from "@/lib/types";
 
 // Cloverly-style editorial homepage. Sections alternate cream / bone /
 // forest so the page has real scrolling rhythm and a strong forest
@@ -189,15 +191,29 @@ function TrustIndicators() {
 
 function FeaturedTickets() {
   const { t } = useLanguage();
-  // Four hand-picked tickets across categories + cities. Clicking any
-  // card routes to its details page; the grid item matches the TicketCard
-  // from /search so the visual language is consistent everywhere.
-  const featured = [
-    MOCK_TICKETS.find((x) => x.id === "t-003"),
-    MOCK_TICKETS.find((x) => x.id === "t-013"),
-    MOCK_TICKETS.find((x) => x.id === "t-006"),
-    MOCK_TICKETS.find((x) => x.id === "t-008"),
-  ].filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const [featured, setFeatured] = useState<Listing[] | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  // Pull the 4 soonest active listings from the live backend. If the call
+  // fails (cold start, network blip), drop the section entirely rather
+  // than blocking the rest of the homepage — featured is decorative.
+  useEffect(() => {
+    let cancelled = false;
+    listListings({ sort: "soonest", page: 1, limit: 4 })
+      .then((res) => {
+        if (cancelled) return;
+        setFeatured(res.items);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (failed) return null;
 
   return (
     <section className="bg-cream py-24 md:py-28">
@@ -222,9 +238,13 @@ function FeaturedTickets() {
           </Link>
         </div>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
-          ))}
+          {featured === null
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <TicketCardSkeleton key={i} />
+              ))
+            : featured.map((listing) => (
+                <TicketCard key={listing.id} ticket={listing} />
+              ))}
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -11,21 +11,19 @@ import { TicketCardSkeleton } from "@/components/search/TicketCardSkeleton";
 import { FilterPanel } from "@/components/search/FilterPanel";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useDebouncedValue } from "@/lib/useDebouncedValue";
-import { MOCK_TICKETS } from "@/lib/mock-data";
+import { ApiError, listListings } from "@/lib/api";
+import type { Listing } from "@/lib/types";
 import {
   EMPTY_FILTERS,
   countActiveFilters,
-  filterTickets,
+  filtersToQuery,
   hasActiveFilters,
-  sortTickets,
   type SearchFilters,
   type SortKey,
-} from "@/lib/search";
+} from "@/lib/search-query";
 
-const INITIAL_LOAD_MS = 300;
+const PAGE_SIZE = 20;
 
-// useSearchParams() reads the URL but requires a Suspense boundary in the
-// App Router; the page is a Suspense wrapper around the real content.
 export default function SearchPage() {
   return (
     <Suspense fallback={<SearchPageFallback />}>
@@ -41,13 +39,15 @@ function SearchPageInner() {
   const [query, setQuery] = useState(() => params.get("q") ?? "");
   const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortKey>("soonest");
+  const [page, setPage] = useState(1);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
+  const [items, setItems] = useState<Listing[]>([]);
+  const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const id = window.setTimeout(() => setIsLoading(false), INITIAL_LOAD_MS);
-    return () => window.clearTimeout(id);
-  }, []);
+  const [error, setError] = useState<ApiError | null>(null);
+  // Bumped to force a re-fetch when the user clicks the retry button.
+  const [retryNonce, setRetryNonce] = useState(0);
 
   // Close mobile filters when viewport crosses up to md.
   useEffect(() => {
@@ -70,18 +70,79 @@ function SearchPageInner() {
     [filters, debouncedQuery],
   );
 
-  const results = useMemo(
-    () => sortTickets(filterTickets(MOCK_TICKETS, effectiveFilters), sort),
+  // Stable signature of inputs that should snap pagination back to page 1
+  // (anything but `page` itself). When the signature changes mid-render
+  // we reset `page` and `lastSig` in-place — the React-blessed pattern
+  // for "adjusting state when a prop changes" (no effect needed).
+  const filterSignature = useMemo(
+    () =>
+      JSON.stringify({
+        ...effectiveFilters,
+        cities: Array.from(effectiveFilters.cities),
+        providers: Array.from(effectiveFilters.providers),
+        sort,
+      }),
     [effectiveFilters, sort],
   );
+  const [lastFilterSignature, setLastFilterSignature] = useState(filterSignature);
+  if (lastFilterSignature !== filterSignature) {
+    setLastFilterSignature(filterSignature);
+    setPage(1);
+  }
+
+  // Fetch results from the live backend whenever the query inputs change.
+  // The sync setState pair at the top of the effect (the "show spinner now,
+  // resolve later" UX) is the canonical fetch-on-change pattern in vanilla
+  // React; the React 19 compiler lint warns against it because it prefers
+  // Suspense + a data library. We deliberately use plain fetch in MVP
+  // (CLAUDE.md), so the cascade is intentional.
+  useEffect(() => {
+    let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsLoading(true);
+    setError(null);
+    const query = filtersToQuery(effectiveFilters, {
+      sort,
+      page,
+      limit: PAGE_SIZE,
+    });
+    listListings(query)
+      .then((res) => {
+        if (cancelled) return;
+        setItems(res.items);
+        setTotal(res.total);
+        setIsLoading(false);
+      })
+      .catch((e: unknown) => {
+        if (cancelled) return;
+        setError(
+          e instanceof ApiError
+            ? e
+            : new ApiError({
+                code: "unknown_error",
+                message: e instanceof Error ? e.message : "Unknown error",
+                status: 0,
+              }),
+        );
+        setItems([]);
+        setTotal(0);
+        setIsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [effectiveFilters, sort, page, retryNonce]);
 
   const activeCount = countActiveFilters(filters);
   const hasAnyFilter = hasActiveFilters(effectiveFilters);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
-  function resetFilters() {
+  const resetFilters = useCallback(() => {
     setFilters(EMPTY_FILTERS);
     setQuery("");
-  }
+  }, []);
+
+  const retry = useCallback(() => setRetryNonce((n) => n + 1), []);
 
   const sortOptions = [
     { value: "soonest", label: t("sort.soonest") },
@@ -105,7 +166,7 @@ function SearchPageInner() {
       </header>
 
       <div className="flex items-center justify-between gap-3">
-        <ResultsLine loading={isLoading} count={results.length} />
+        <ResultsLine loading={isLoading} error={error} count={total} />
         <div className="flex items-center gap-2">
           <Button
             variant="secondary"
@@ -149,18 +210,29 @@ function SearchPageInner() {
         <section className="flex flex-col gap-6">
           {isLoading ? (
             <SkeletonGrid />
-          ) : results.length === 0 ? (
+          ) : error ? (
+            <ErrorState onRetry={retry} />
+          ) : items.length === 0 ? (
             hasAnyFilter ? (
               <NoResultsState onReset={resetFilters} />
             ) : (
               <EmptyQueryState />
             )
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2">
-              {results.map((ticket) => (
-                <TicketCard key={ticket.id} ticket={ticket} />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {items.map((listing) => (
+                  <TicketCard key={listing.id} ticket={listing} />
+                ))}
+              </div>
+              {totalPages > 1 && (
+                <Pager
+                  page={page}
+                  totalPages={totalPages}
+                  onChange={setPage}
+                />
+              )}
+            </>
           )}
         </section>
       </div>
@@ -199,13 +271,16 @@ function SearchPageInner() {
 
 function ResultsLine({
   loading,
+  error,
   count,
 }: {
   loading: boolean;
+  error: ApiError | null;
   count: number;
 }) {
   const { t } = useLanguage();
   if (loading) return <p className="text-caption text-ink-3">{t("common.loading")}</p>;
+  if (error) return <p className="text-caption text-ink-3">{t("search.errorTitle")}</p>;
 
   const label =
     count === 1
@@ -261,6 +336,59 @@ function NoResultsState({ onReset }: { onReset: () => void }) {
         {t("search.clearFilters")}
       </Button>
     </div>
+  );
+}
+
+function ErrorState({ onRetry }: { onRetry: () => void }) {
+  const { t } = useLanguage();
+  return (
+    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border-strong bg-bone p-12 text-center">
+      <h2 className="font-display text-h2 font-medium text-ink">
+        {t("search.errorTitle")}
+      </h2>
+      <p className="max-w-md text-body text-ink-2">{t("search.errorBody")}</p>
+      <Button variant="secondary" onClick={onRetry}>
+        {t("common.retry")}
+      </Button>
+    </div>
+  );
+}
+
+function Pager({
+  page,
+  totalPages,
+  onChange,
+}: {
+  page: number;
+  totalPages: number;
+  onChange: (next: number) => void;
+}) {
+  const { t } = useLanguage();
+  const label = t("search.pageOf")
+    .replace("{page}", String(page))
+    .replace("{total}", String(totalPages));
+  return (
+    <nav className="flex items-center justify-between gap-3 border-t border-border pt-6">
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => onChange(Math.max(1, page - 1))}
+        disabled={page <= 1}
+      >
+        ← {t("common.previous")}
+      </Button>
+      <span className="text-caption text-ink-2" data-numeric>
+        {label}
+      </span>
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => onChange(Math.min(totalPages, page + 1))}
+        disabled={page >= totalPages}
+      >
+        {t("common.next")} →
+      </Button>
+    </nav>
   );
 }
 
