@@ -14,7 +14,10 @@
     "continue": "המשך",
     "comingSoon": "בקרוב",
     "notYetAvailable": "עדיין לא זמין",
-    "or": "או"
+    "or": "או",
+    "retry": "נסו שוב",
+    "previous": "הקודם",
+    "next": "הבא"
   },
   "trust": {
     "verified": "מאומת",
@@ -62,7 +65,12 @@
     "timelineStep4Body": "רק אחרי שאישרתם קבלה, המוכר מקבל את הכסף.",
     "stateDone": "הושלם",
     "stateCurrent": "בתהליך",
-    "stateUpcoming": "ממתין"
+    "stateUpcoming": "ממתין",
+    "notFoundTitle": "הכרטיס לא נמצא",
+    "notFoundBody": "הכרטיס שחיפשתם כבר לא זמין — ייתכן שנמכר או הוסר. נסו לחפש כרטיס אחר.",
+    "errorTitle": "טעינת הכרטיס נכשלה",
+    "errorBody": "ייתכן ויש בעיה בחיבור. נסו שוב.",
+    "backToSearch": "חזרה לחיפוש"
   },
   "category": {
     "all": "הכל",
@@ -157,7 +165,10 @@
     "clearFilters": "ניקוי מסננים",
     "openFiltersMobile": "מסננים",
     "applyFilters": "הצגת תוצאות",
-    "activeFilters": "מסננים פעילים"
+    "activeFilters": "מסננים פעילים",
+    "errorTitle": "טעינת הכרטיסים נכשלה",
+    "errorBody": "ייתכן ויש בעיה בחיבור או שהשרת לא זמין כרגע. נסו שוב.",
+    "pageOf": "עמוד {page} מתוך {total}"
   },
   "filters": {
     "title": "מסננים",

@@ -4,9 +4,21 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
-import type { SearchFilters } from "@/lib/search";
+import type { SearchFilters } from "@/lib/search-query";
 import type { TicketProvider } from "@/lib/types";
-import { ALL_CITIES, ALL_PROVIDERS } from "@/lib/mock-data";
+
+// Fixed lists for the filter checkboxes. Cities are the current seed
+// set returned by GET /listings; providers are the canonical contract
+// union (`API_CONTRACT.md` → Search → provider). Both grow alongside
+// connector and seed coverage — when a /cities endpoint exists we
+// switch to fetching this list dynamically.
+const FILTER_CITIES = ["Tel Aviv", "Jerusalem", "Haifa", "Caesarea", "Eilat"] as const;
+const FILTER_PROVIDERS: ReadonlyArray<TicketProvider> = [
+  "eventim_il",
+  "hala",
+  "leaan",
+  "tmura",
+];
 
 export type FilterPanelProps = {
   filters: SearchFilters;
@@ -62,7 +74,7 @@ export function FilterPanel({ filters, onChange, onReset }: FilterPanelProps) {
 
       <FilterGroup label={t("filters.city")}>
         <div className="flex flex-col gap-2.5">
-          {ALL_CITIES.map((city) => (
+          {FILTER_CITIES.map((city) => (
             <Checkbox
               key={city}
               checked={filters.cities.has(city)}
@@ -90,7 +102,7 @@ export function FilterPanel({ filters, onChange, onReset }: FilterPanelProps) {
 
       <FilterGroup label={t("filters.provider")}>
         <div className="flex flex-col gap-2.5">
-          {ALL_PROVIDERS.map((provider) => (
+          {FILTER_PROVIDERS.map((provider) => (
             <Checkbox
               key={provider}
               checked={filters.providers.has(provider)}
