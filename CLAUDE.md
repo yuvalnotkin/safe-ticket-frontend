@@ -56,7 +56,7 @@ src/
 
 For every segment of work:
 
-1. Create a feature branch named `phase-<N>/segment-<M>-<slug>` (e.g. `phase-2/segment-1-foundation`).
+1. Create a feature branch named `phase-<N>/segment-<M>-<slug>` (e.g. `phase-2/segment-1-foundation`), **cut from current `origin/main`** — not from the prior segment's branch, and not from your previously-pushed working branch. After the prior segment squash-merges, `main` contains a single squash commit that condenses the segment's history. A branch still rooted in pre-squash history will surface as `CONFLICTING` on the PR even when the content cherry-picks cleanly, because the pre-squash commits overlap with the squash commit on `main`. `git checkout main && git pull --ff-only && git checkout -b phase-<N>/segment-<M>-<slug>` is the always-correct sequence.
 2. Commit per logical change with descriptive messages.
 3. Push the branch.
 4. Open a PR against `main`. PR title format: `Phase <N> segment <M>: <short outcome>`. Body covers what changed, how to test, anything tricky to look at.
@@ -64,6 +64,13 @@ For every segment of work:
 6. Vercel auto-deploys from `main` after merge.
 
 If a subagent is dispatched (Superpowers `subagent-driven-development` etc.), the subagent's prompt must explicitly forbid `git push` — the parent agent owns all pushes. Defense in depth on top of branch protection.
+
+## Deployment + Environment
+
+- **`NEXT_PUBLIC_*` env vars are inlined at build time.** Next replaces every `process.env.NEXT_PUBLIC_FOO` reference with the literal string at `pnpm build` time. Saving a new value in Vercel's project settings does **not** rebuild — the running deployment still has the old (or missing) inlined value baked in. After changing such a var on Vercel, manually trigger a redeploy: Deployments tab → latest production deployment → "..." menu → **Redeploy** (uncheck "use existing build cache" if asked), or push an empty commit to `main`.
+- **`pnpm build` does not fail on missing `NEXT_PUBLIC_*` vars** unless build-time code paths actually evaluate them. A homepage that fetches in a `useEffect` and a `/[id]` page that's `ƒ Dynamic` both defer their env-var reads to runtime, so the build is happily green while production silently breaks at request time. When a segment introduces a new env-var dependency, the segment is not done until: (1) the var is set in Vercel's Production scope, (2) a deploy has run with the var present at build time, (3) a request-time probe against the live URL confirms the wiring works.
+- **Quick diagnostic for "did Vercel build with the var set?":** `curl` the served homepage, grep for a client chunk path under `/_next/static/chunks/`, fetch the chunk, and grep for the variable name. If you see `process.env.NEXT_PUBLIC_FOO` shipped uninlined, the var was missing at Vercel build time. If you see the inlined literal string instead, you're good.
+- **Vercel preview URLs (the `*-<team>.vercel.app` per-deployment ones) are SSO-gated and return 401 to anonymous curl.** Smoke from `safe-ticket-frontend.vercel.app` (the production alias) post-merge, not from preview URLs.
 
 ## Verification Model
 
