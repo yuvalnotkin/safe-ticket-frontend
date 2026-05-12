@@ -95,7 +95,11 @@
     "languageToggleAria": "Switch language",
     "hiPrefix": "Hi, ",
     "logout": "Log out",
-    "accountAria": "My account"
+    "accountAria": "My account",
+    "account": "My account",
+    "profile": "Profile",
+    "buyerDashboard": "Buyer dashboard",
+    "sellerDashboard": "Seller dashboard"
   },
   "home": {
     "eyebrow": "The secondary market, honest for once",
@@ -262,6 +266,38 @@
     "socialDisabled": "Quick sign-in options will be enabled at public launch.",
     "termsAgree": "By continuing you agree to the Terms of Service and Privacy Policy.",
     "trustCopy": "Safe Ticket holds your money in escrow until the ticket reaches you. Your data is private and never sold."
+  },
+  "profile": {
+    "title": "Your profile",
+    "subtitle": "Update your account details. Email can't be changed here.",
+    "emailLabel": "Email",
+    "emailHint": "Email changes go through a verified flow — read-only here.",
+    "displayNameLabel": "Display name",
+    "displayNamePlaceholder": "The name buyers and sellers will see",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+972-50-1234567",
+    "phoneHint": "Optional. Used only for transfer updates.",
+    "avatarUrlLabel": "Avatar URL",
+    "avatarUrlPlaceholder": "https://…",
+    "avatarUrlHint": "Link only — file upload arrives later.",
+    "memberSince": "On Safe Ticket since {date}",
+    "saveCta": "Save changes",
+    "savedToast": "Profile saved",
+    "noChanges": "Nothing to save — no changes were made.",
+    "errorGeneric": "We couldn't save your profile.",
+    "errorLoad": "We couldn't load your profile.",
+    "retryLoad": "Try again"
+  },
+  "dashboard": {
+    "buyerTitle": "Buyer dashboard",
+    "buyerHeading": "Your purchases will live here",
+    "buyerBody": "The buyer dashboard opens in the next Safe Ticket phase. You'll see your purchased tickets, transfer status, and escrow state.",
+    "buyerEyebrow": "Coming in Phase 3",
+    "sellerTitle": "Seller dashboard",
+    "sellerHeading": "Your listings will live here",
+    "sellerBody": "The seller dashboard opens in the next phase. You'll be able to connect a provider account, list at face value, and track payouts.",
+    "sellerEyebrow": "Coming in Phase 3",
+    "browseCta": "Browse tickets"
   },
   "toast": {
     "notYetAvailable": "Not yet available — we're working on it.",

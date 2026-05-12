@@ -281,6 +281,40 @@ describe("AuthProvider — signup / login / logout", () => {
   });
 });
 
+describe("AuthProvider — setUser", () => {
+  it("setUser replaces the exposed user (used by /profile after save)", async () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(SESSION));
+    setFetchHandler((url) => {
+      if (url.includes("/auth/me")) return jsonResponse(FULL_USER);
+      throw new Error("unexpected url: " + url);
+    });
+
+    let current: AuthContextValue | null = null;
+    render(
+      <AuthProvider>
+        <Probe
+          onAuth={(a) => {
+            current = a;
+          }}
+        />
+      </AuthProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId("status").textContent).toBe("authenticated");
+    });
+    expect(screen.getByTestId("user-displayname").textContent).toBe("Aviv");
+
+    await act(async () => {
+      current!.setUser({ ...FULL_USER, displayName: "Aviv C.", phone: "+972-50-0000000" });
+    });
+
+    expect(screen.getByTestId("user-displayname").textContent).toBe("Aviv C.");
+    expect(screen.getByTestId("user-phone").textContent).toBe("+972-50-0000000");
+    // status unchanged
+    expect(screen.getByTestId("status").textContent).toBe("authenticated");
+  });
+});
+
 describe("AuthProvider — 401 mid-session", () => {
   it("safeticket:auth-expired event clears state without calling /auth/logout", async () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(SESSION));

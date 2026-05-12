@@ -36,6 +36,10 @@ export type AuthContextValue = {
   }) => Promise<void>;
   login: (payload: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
+  // Replace the cached user (used by /profile after a successful save so the
+  // PUT response propagates to nav greeting etc. without a second network
+  // call — the contract guarantees PUT response is the same shape as GET).
+  setUser: (user: User | null) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -200,7 +204,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [teardown]);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ status, user, session, signup, login, logout }),
+    () => ({ status, user, session, signup, login, logout, setUser }),
     [status, user, session, signup, login, logout],
   );
 

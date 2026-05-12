@@ -95,7 +95,11 @@
     "languageToggleAria": "החלפת שפה",
     "hiPrefix": "שלום, ",
     "logout": "התנתקות",
-    "accountAria": "החשבון שלי"
+    "accountAria": "החשבון שלי",
+    "account": "החשבון שלי",
+    "profile": "הפרופיל שלי",
+    "buyerDashboard": "אזור הקונה",
+    "sellerDashboard": "אזור המוכר"
   },
   "home": {
     "eyebrow": "השוק המשני, הוגן באמת",
@@ -262,6 +266,38 @@
     "socialDisabled": "אפשרויות ההתחברות המהירה יופעלו בהשקה הציבורית.",
     "termsAgree": "בהמשך התהליך אתם מאשרים את תקנון השימוש ומדיניות הפרטיות.",
     "trustCopy": "Safe Ticket מחזיק את הכסף בנאמנות עד שהכרטיס מגיע אליכם. המידע שלכם פרטי ולא נמכר."
+  },
+  "profile": {
+    "title": "הפרופיל שלי",
+    "subtitle": "עדכון פרטי החשבון. כתובת האימייל אינה ניתנת לשינוי כאן.",
+    "emailLabel": "אימייל",
+    "emailHint": "ניתן לשנות אימייל רק דרך תהליך אימות. כאן הוא לקריאה בלבד.",
+    "displayNameLabel": "שם תצוגה",
+    "displayNamePlaceholder": "השם שיופיע לקונים ולמוכרים",
+    "phoneLabel": "טלפון",
+    "phonePlaceholder": "+972-50-1234567",
+    "phoneHint": "אופציונלי. נשתמש בו רק לעדכונים על העברות.",
+    "avatarUrlLabel": "קישור לתמונת פרופיל",
+    "avatarUrlPlaceholder": "https://…",
+    "avatarUrlHint": "קישור URL בלבד — העלאת קבצים תהיה זמינה בהמשך.",
+    "memberSince": "חבר ב-Safe Ticket מאז {date}",
+    "saveCta": "שמירת שינויים",
+    "savedToast": "השינויים נשמרו",
+    "noChanges": "אין מה לשמור — לא בוצעו שינויים.",
+    "errorGeneric": "לא הצלחנו לשמור את הפרופיל.",
+    "errorLoad": "לא הצלחנו לטעון את הפרופיל.",
+    "retryLoad": "ניסיון נוסף"
+  },
+  "dashboard": {
+    "buyerTitle": "אזור הקונה",
+    "buyerHeading": "הרכישות שלך יופיעו כאן",
+    "buyerBody": "אזור הקונה ייפתח בשלב הבא של Safe Ticket. תוכלו לראות כאן כרטיסים שקניתם, סטטוס העברה ומצב חשבון הנאמנות.",
+    "buyerEyebrow": "בקרוב בשלב 3",
+    "sellerTitle": "אזור המוכר",
+    "sellerHeading": "הכרטיסים שאתם מפרסמים יופיעו כאן",
+    "sellerBody": "אזור המוכר ייפתח בשלב הבא. כאן תוכלו לחבר חשבון ספק, לפרסם כרטיס במחיר הנקוב ולעקוב אחרי תשלומים.",
+    "sellerEyebrow": "בקרוב בשלב 3",
+    "browseCta": "עיון בכרטיסים"
   },
   "toast": {
     "notYetAvailable": "עדיין לא זמין — אנחנו עובדים על זה.",
