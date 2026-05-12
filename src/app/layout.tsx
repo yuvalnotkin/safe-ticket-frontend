@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rubik, Alef } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
+import { AuthProvider } from "@/lib/auth/AuthContext";
 import { ToastProvider } from "@/components/ui/Toast";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -45,11 +46,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <LanguageProvider initialLanguage="he">
-          <ToastProvider>
-            <Header />
-            <div className="flex flex-1 flex-col">{children}</div>
-            <Footer />
-          </ToastProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <Header />
+              <div className="flex flex-1 flex-col">{children}</div>
+              <Footer />
+            </ToastProvider>
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>

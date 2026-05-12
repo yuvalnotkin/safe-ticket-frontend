@@ -13,30 +13,19 @@ import {
   type FieldErrorMap,
 } from "@/lib/auth/error-mapping";
 
-const LOGIN_FIELDS = ["email", "password"] as const;
-type LoginField = (typeof LOGIN_FIELDS)[number];
-type FieldErrors = FieldErrorMap<LoginField>;
+const SIGNUP_FIELDS = ["email", "password", "displayName"] as const;
+type SignupField = (typeof SIGNUP_FIELDS)[number];
+type FieldErrors = FieldErrorMap<SignupField>;
 
-// Renders an inline form error from an ApiError. Maps the contract's known
-// codes to i18n strings; falls back to a generic message + technical detail.
-function useAuthErrorCopy() {
-  const { t } = useLanguage();
-  return {
-    invalidCredentials: t("auth.invalidCredentials"),
-    invalidRequest: t("auth.invalidRequest"),
-    generic: t("auth.genericError"),
-  };
-}
-
-export default function LoginPage() {
+export default function SignupPage() {
   return (
-    <Suspense fallback={<LoginPageFallback />}>
-      <LoginPageInner />
+    <Suspense fallback={<SignupPageFallback />}>
+      <SignupPageInner />
     </Suspense>
   );
 }
 
-function LoginPageFallback() {
+function SignupPageFallback() {
   return (
     <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
       <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10" />
@@ -44,15 +33,15 @@ function LoginPageFallback() {
   );
 }
 
-function LoginPageInner() {
+function SignupPageInner() {
   const { t } = useLanguage();
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const errorCopy = useAuthErrorCopy();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -60,7 +49,7 @@ function LoginPageInner() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const next = searchParams.get("next") ?? "/profile";
-  const signupHref = `/signup?next=${encodeURIComponent(next)}`;
+  const loginHref = `/login?next=${encodeURIComponent(next)}`;
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -69,25 +58,25 @@ function LoginPageInner() {
     setFieldErrors({});
     setSubmitting(true);
     try {
-      await login({ email, password });
+      await signup({ email, password, displayName });
       router.push(next);
     } catch (err) {
       if (err instanceof ApiError) {
-        if (err.code === "invalid_credentials") {
-          setFormError(errorCopy.invalidCredentials);
+        if (err.code === "signup_failed") {
+          setFormError(t("auth.signupFailed"));
         } else if (err.code === "invalid_request") {
-          const fields = mapInvalidRequestDetails(err.details, LOGIN_FIELDS);
+          const fields = mapInvalidRequestDetails(err.details, SIGNUP_FIELDS);
           if (Object.keys(fields).length > 0) {
             setFieldErrors(fields);
           } else {
-            setFormError(errorCopy.invalidRequest);
+            setFormError(t("auth.invalidRequest"));
           }
         } else {
-          setFormError(errorCopy.generic);
+          setFormError(t("auth.genericError"));
           setFormDetails(err.message);
         }
       } else {
-        setFormError(errorCopy.generic);
+        setFormError(t("auth.genericError"));
       }
       setSubmitting(false);
     }
@@ -97,11 +86,23 @@ function LoginPageInner() {
     <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
       <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10">
         <h1 className="font-display text-h1 font-medium leading-tight text-ink">
-          {t("auth.loginTitle")}
+          {t("auth.signupTitle")}
         </h1>
-        <p className="mt-3 text-body text-ink-2">{t("auth.loginSubtitle")}</p>
+        <p className="mt-3 text-body text-ink-2">{t("auth.signupSubtitle")}</p>
 
         <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4" noValidate>
+          <Input
+            type="text"
+            label={t("auth.displayName")}
+            placeholder={t("auth.displayNamePlaceholder")}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            autoComplete="name"
+            error={fieldErrors.displayName}
+            minLength={1}
+            maxLength={80}
+            required
+          />
           <Input
             type="email"
             label={t("auth.email")}
@@ -116,10 +117,12 @@ function LoginPageInner() {
             type={showPassword ? "text" : "password"}
             label={t("auth.password")}
             placeholder={t("auth.passwordPlaceholder")}
+            hint={t("auth.passwordMinHint")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
+            autoComplete="new-password"
             error={fieldErrors.password}
+            minLength={8}
             trailingSlot={
               <button
                 type="button"
@@ -149,64 +152,22 @@ function LoginPageInner() {
           )}
 
           <Button type="submit" variant="cta" size="lg" loading={submitting}>
-            {submitting ? t("auth.submitting") : t("auth.loginCta")}
+            {submitting ? t("auth.submitting") : t("auth.signupCta")}
           </Button>
           <p className="text-caption text-ink-3">{t("auth.termsAgree")}</p>
         </form>
 
         <p className="mt-6 text-small text-ink-2">
-          {t("auth.noAccountQuestion")}{" "}
-          <Link href={signupHref} className="font-medium text-forest-900 underline">
-            {t("auth.signupLink")}
+          {t("auth.haveAccountQuestion")}{" "}
+          <Link href={loginHref} className="font-medium text-forest-900 underline">
+            {t("auth.loginLink")}
           </Link>
         </p>
-
-        <div className="my-8 flex items-center gap-3">
-          <span className="h-px flex-1 bg-border" />
-          <span className="text-micro uppercase tracking-[0.12em] text-ink-3">
-            {t("common.or")}
-          </span>
-          <span className="h-px flex-1 bg-border" />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <Button variant="secondary" size="md" disabled leadingIcon={<GoogleIcon />}>
-            {t("auth.googleCta")}
-          </Button>
-          <Button variant="secondary" size="md" disabled leadingIcon={<AppleIcon />}>
-            {t("auth.appleCta")}
-          </Button>
-          <p className="text-caption text-ink-3">{t("auth.socialDisabled")}</p>
-        </div>
 
         <div className="mt-8 rounded-md border border-sage/30 bg-success-bg p-4">
           <p className="text-small text-forest-900">{t("auth.trustCopy")}</p>
         </div>
       </div>
     </section>
-  );
-}
-
-function GoogleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M21.8 10.2h-9.6v3.8h5.5a4.7 4.7 0 0 1-2 3.1v2.6h3.3c1.9-1.7 3-4.3 3-7.4 0-.7-.1-1.4-.2-2.1z"
-        fill="currentColor"
-      />
-      <path
-        d="M12.2 22c2.6 0 4.8-.9 6.4-2.3l-3.3-2.6c-.9.6-2.1 1-3.1 1a5.4 5.4 0 0 1-5.1-3.7H3.7v2.4A9.8 9.8 0 0 0 12.2 22z"
-        fill="currentColor"
-        opacity=".6"
-      />
-    </svg>
-  );
-}
-
-function AppleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M16.4 12.5c0-2.4 2-3.6 2.1-3.6-1.2-1.7-3-2-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.8-1.7 0-3.3 1-4.2 2.5-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.3 2.6 1.3 0 1.8-.9 3.4-.9s2 .9 3.4.8c1.4 0 2.3-1.3 3.1-2.5.7-1 1.2-2.1 1.5-3.2-1.9-.7-3.2-2.5-3.2-4zM13.7 5.3c.7-.8 1.2-2 1-3.3-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.3-.5 3-1.2z" />
-    </svg>
   );
 }

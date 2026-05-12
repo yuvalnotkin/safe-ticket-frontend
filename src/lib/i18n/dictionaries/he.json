@@ -92,7 +92,10 @@
     "sell": "פרסום כרטיס",
     "searchAria": "פתיחת חיפוש",
     "menuAria": "תפריט",
-    "languageToggleAria": "החלפת שפה"
+    "languageToggleAria": "החלפת שפה",
+    "hiPrefix": "שלום, ",
+    "logout": "התנתקות",
+    "accountAria": "החשבון שלי"
   },
   "home": {
     "eyebrow": "השוק המשני, הוגן באמת",
@@ -230,18 +233,35 @@
     "a10": "Safe Ticket מתמקד בשוק הישראלי — האירועים מתקיימים בישראל וההעברה מתבצעת בחשבונות ספק ישראליים. קניית כרטיסים מחו״ל אפשרית אם יש לכם חשבון ספק ישראלי תקף."
   },
   "auth": {
-    "loginTitle": "כניסה או הרשמה",
-    "loginSubtitle": "היכנסו עם אימייל וטלפון. כרטיסים מחכים.",
+    "loginTitle": "כניסה",
+    "loginSubtitle": "ברוכים השבים. כרטיסים מאומתים מחכים.",
+    "signupTitle": "הרשמה",
+    "signupSubtitle": "מהיר — לא נדרשים פרטי תשלום בשלב זה.",
     "email": "אימייל",
     "emailPlaceholder": "you@example.com",
-    "phone": "טלפון נייד",
-    "phonePlaceholder": "050-0000000",
-    "continueCta": "המשך",
+    "password": "סיסמה",
+    "passwordPlaceholder": "לפחות 8 תווים",
+    "passwordMinHint": "לפחות 8 תווים.",
+    "showPassword": "הצגת סיסמה",
+    "hidePassword": "הסתרת סיסמה",
+    "displayName": "שם",
+    "displayNamePlaceholder": "איך לקרוא לכם?",
+    "loginCta": "כניסה",
+    "signupCta": "יצירת חשבון",
+    "submitting": "רגע…",
+    "haveAccountQuestion": "כבר יש לכם חשבון?",
+    "loginLink": "כניסה",
+    "noAccountQuestion": "אין לכם חשבון?",
+    "signupLink": "הרשמה",
+    "invalidCredentials": "אימייל או סיסמה שגויים.",
+    "signupFailed": "לא הצלחנו ליצור את החשבון — ייתכן שהאימייל כבר רשום.",
+    "invalidRequest": "חלק מהשדות זקוקים לתיקון.",
+    "genericError": "משהו השתבש אצלנו. נסו שוב.",
     "googleCta": "המשך עם Google",
     "appleCta": "המשך עם Apple",
     "socialDisabled": "אפשרויות ההתחברות המהירה יופעלו בהשקה הציבורית.",
     "termsAgree": "בהמשך התהליך אתם מאשרים את תקנון השימוש ומדיניות הפרטיות.",
-    "trustCopy": "Safe Ticket משתמש באימות דו-שלבי ובנאמנות על כל רכישה. המידע שלכם פרטי ולא נמכר."
+    "trustCopy": "Safe Ticket מחזיק את הכסף בנאמנות עד שהכרטיס מגיע אליכם. המידע שלכם פרטי ולא נמכר."
   },
   "toast": {
     "notYetAvailable": "עדיין לא זמין — אנחנו עובדים על זה.",

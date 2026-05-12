@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+// @vitest-environment jsdom
+import { describe, it, expect, beforeEach, vi, afterEach, expectTypeOf } from "vitest";
 import {
   ApiError,
   setTokenGetter,
@@ -11,7 +12,7 @@ import {
   getProfile,
   updateProfile,
 } from "./api";
-import type { ListingsQuery } from "./types";
+import type { AuthUser, ListingsQuery, Session } from "./types";
 
 const ORIGINAL_FETCH = global.fetch;
 const ORIGINAL_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -49,6 +50,41 @@ describe("env reader", () => {
     delete process.env.NEXT_PUBLIC_API_BASE_URL;
     mockFetchOk({ items: [], page: 1, limit: 20, total: 0 });
     await expect(listListings({})).rejects.toThrow(/NEXT_PUBLIC_API_BASE_URL/);
+  });
+});
+
+describe("401 auth-expired event", () => {
+  it("dispatches a 'safeticket:auth-expired' CustomEvent on 401 responses", async () => {
+    mockFetchError(
+      { error: { code: "unauthorized", message: "stale token" } },
+      401,
+    );
+    setTokenGetter(() => "stale-token");
+    const handler = vi.fn();
+    window.addEventListener("safeticket:auth-expired", handler);
+    try {
+      await me();
+    } catch {
+      // expected
+    }
+    window.removeEventListener("safeticket:auth-expired", handler);
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+
+  it("does NOT dispatch the event on non-401 errors", async () => {
+    mockFetchError(
+      { error: { code: "listing_not_found", message: "nope" } },
+      404,
+    );
+    const handler = vi.fn();
+    window.addEventListener("safeticket:auth-expired", handler);
+    try {
+      await getListing("missing");
+    } catch {
+      // expected
+    }
+    window.removeEventListener("safeticket:auth-expired", handler);
+    expect(handler).not.toHaveBeenCalled();
   });
 });
 
@@ -159,15 +195,25 @@ describe("endpoints exist", () => {
   beforeEach(() => {
     mockFetchOk({});
   });
-  it("signup returns the parsed body", async () => {
-    mockFetchOk({ user: { id: "u1" }, session: { accessToken: "t" } });
+  it("signup returns the parsed body, narrowed to AuthUser per contract", async () => {
+    mockFetchOk({
+      user: { id: "u1", email: "a@b.com", displayName: "A" },
+      session: { accessToken: "t", refreshToken: "r", expiresAt: 1 },
+    });
     const out = await signup({ email: "a@b.com", password: "x", displayName: "A" });
-    expect(out.user.id).toBe("u1");
+    expect(out.user).toEqual({ id: "u1", email: "a@b.com", displayName: "A" });
+    expectTypeOf(out.user).toEqualTypeOf<AuthUser>();
+    expectTypeOf(out.session).toEqualTypeOf<Session>();
   });
-  it("login returns the parsed body", async () => {
-    mockFetchOk({ user: { id: "u1" }, session: { accessToken: "t" } });
+  it("login returns the parsed body, narrowed to AuthUser per contract", async () => {
+    mockFetchOk({
+      user: { id: "u1", email: "a@b.com", displayName: "A" },
+      session: { accessToken: "t", refreshToken: "r", expiresAt: 1 },
+    });
     const out = await login({ email: "a@b.com", password: "x" });
-    expect(out.user.id).toBe("u1");
+    expect(out.user).toEqual({ id: "u1", email: "a@b.com", displayName: "A" });
+    expectTypeOf(out.user).toEqualTypeOf<AuthUser>();
+    expectTypeOf(out.session).toEqualTypeOf<Session>();
   });
   it("logout resolves on 204", async () => {
     global.fetch = vi.fn(async () => new Response(null, { status: 204 })) as unknown as typeof fetch;
