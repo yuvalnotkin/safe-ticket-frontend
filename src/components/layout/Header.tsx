@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -20,10 +20,13 @@ export function Header() {
   const { status, user, logout } = useAuth();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
   const isAuthed = status === "authenticated";
 
   async function onLogout() {
     setMenuOpen(false);
+    setAccountOpen(false);
     await logout();
     router.push("/");
   }
@@ -47,10 +50,35 @@ export function Header() {
     };
   }, []);
 
+  // Click-outside + Escape close the desktop account dropdown.
+  useEffect(() => {
+    if (!accountOpen) return;
+    function onPointerDown(e: MouseEvent) {
+      if (!accountRef.current?.contains(e.target as Node)) {
+        setAccountOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setAccountOpen(false);
+    }
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [accountOpen]);
+
   const navLinks: Array<{ label: string; href: string }> = [
     { label: t("nav.browse"), href: "/search" },
     { label: t("nav.howItWorks"), href: "/how-it-works" },
     { label: t("nav.faq"), href: "/faq" },
+  ];
+
+  const accountItems: Array<{ label: string; href: string }> = [
+    { label: t("nav.profile"), href: "/profile" },
+    { label: t("nav.buyerDashboard"), href: "/dashboard/buyer" },
+    { label: t("nav.sellerDashboard"), href: "/dashboard/seller" },
   ];
 
   return (
@@ -85,22 +113,53 @@ export function Header() {
 
         <div className="ms-auto hidden items-center gap-4 md:flex">
           {isAuthed && user ? (
-            <>
-              <span
-                className="text-small font-medium text-ink"
-                aria-label={t("nav.accountAria")}
-              >
-                {t("nav.hiPrefix")}
-                {user.displayName}
-              </span>
+            <div className="relative" ref={accountRef}>
               <button
                 type="button"
-                onClick={onLogout}
-                className="text-small font-medium text-ink-2 hover:text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30 rounded"
+                onClick={() => setAccountOpen((o) => !o)}
+                aria-haspopup="menu"
+                aria-expanded={accountOpen}
+                aria-label={t("nav.accountAria")}
+                className="inline-flex items-center gap-1.5 rounded text-small font-medium text-ink hover:text-ink-2 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
               >
-                {t("nav.logout")}
+                <span>
+                  {t("nav.hiPrefix")}
+                  {user.displayName}
+                </span>
+                <ChevronIcon open={accountOpen} />
               </button>
-            </>
+              {accountOpen && (
+                <div
+                  role="menu"
+                  className="absolute end-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-md border border-border bg-bone shadow-lg"
+                >
+                  <ul className="flex flex-col py-1">
+                    {accountItems.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          role="menuitem"
+                          href={item.href}
+                          onClick={() => setAccountOpen(false)}
+                          className="block px-4 py-2.5 text-start text-small font-medium text-ink hover:bg-cream focus-visible:outline-none focus-visible:bg-cream"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                    <li>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={onLogout}
+                        className="block w-full px-4 py-2.5 text-start text-small font-medium text-ink hover:bg-cream focus-visible:outline-none focus-visible:bg-cream"
+                      >
+                        {t("nav.logout")}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               href="/login"
@@ -156,10 +215,24 @@ export function Header() {
           ))}
           {isAuthed && user ? (
             <>
-              <span className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink-2">
+              <div className="mt-2 border-t border-border" />
+              <span className="px-3 pt-3 text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
+                {t("nav.account")}
+              </span>
+              <span className="rounded-md px-3 py-1 text-small font-medium text-ink-2">
                 {t("nav.hiPrefix")}
                 {user.displayName}
               </span>
+              {accountItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink hover:bg-cream"
+                >
+                  {item.label}
+                </Link>
+              ))}
               <button
                 type="button"
                 onClick={onLogout}
@@ -215,6 +288,25 @@ function MenuIcon() {
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="m5 7 5 5 5-5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
