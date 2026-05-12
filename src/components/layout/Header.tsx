@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Sheet } from "@/components/ui/Sheet";
 import { LanguageToggle } from "./LanguageToggle";
+import { useAuth } from "@/lib/auth/AuthContext";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +17,16 @@ import { cn } from "@/lib/utils";
 
 export function Header() {
   const { t } = useLanguage();
+  const { status, user, logout } = useAuth();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const isAuthed = status === "authenticated";
+
+  async function onLogout() {
+    setMenuOpen(false);
+    await logout();
+    router.push("/");
+  }
 
   // Close the mobile nav when the viewport crosses up to md (768px+).
   // The hamburger trigger is `md:hidden`, so once the menu is open and the
@@ -73,12 +84,31 @@ export function Header() {
         </nav>
 
         <div className="ms-auto hidden items-center gap-4 md:flex">
-          <Link
-            href="/login"
-            className="text-small font-medium text-ink-2 hover:text-ink"
-          >
-            {t("nav.login")}
-          </Link>
+          {isAuthed && user ? (
+            <>
+              <span
+                className="text-small font-medium text-ink"
+                aria-label={t("nav.accountAria")}
+              >
+                {t("nav.hiPrefix")}
+                {user.displayName}
+              </span>
+              <button
+                type="button"
+                onClick={onLogout}
+                className="text-small font-medium text-ink-2 hover:text-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30 rounded"
+              >
+                {t("nav.logout")}
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="text-small font-medium text-ink-2 hover:text-ink"
+            >
+              {t("nav.login")}
+            </Link>
+          )}
           <LanguageToggle />
           <Link
             href="/login"
@@ -124,13 +154,29 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/login"
-            onClick={() => setMenuOpen(false)}
-            className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink hover:bg-cream"
-          >
-            {t("nav.login")}
-          </Link>
+          {isAuthed && user ? (
+            <>
+              <span className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink-2">
+                {t("nav.hiPrefix")}
+                {user.displayName}
+              </span>
+              <button
+                type="button"
+                onClick={onLogout}
+                className="rounded-md px-3 py-3 text-start font-display text-h4 font-medium text-ink hover:bg-cream"
+              >
+                {t("nav.logout")}
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMenuOpen(false)}
+              className="rounded-md px-3 py-3 font-display text-h4 font-medium text-ink hover:bg-cream"
+            >
+              {t("nav.login")}
+            </Link>
+          )}
           <Link
             href="/login"
             onClick={() => setMenuOpen(false)}

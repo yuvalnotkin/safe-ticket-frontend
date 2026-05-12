@@ -1,4 +1,5 @@
 import type {
+  AuthUser,
   Listing,
   ListingsQuery,
   ListingsResponse,
@@ -31,6 +32,11 @@ let tokenGetter: TokenGetter = () => null;
 export function setTokenGetter(fn: TokenGetter): void {
   tokenGetter = fn;
 }
+
+// Event name dispatched on the browser `window` when any request returns 401.
+// AuthProvider listens for this to drop a stale session without coupling
+// api.ts to the React layer.
+export const AUTH_EXPIRED_EVENT = "safeticket:auth-expired" as const;
 
 // --- Env ---
 
@@ -92,6 +98,9 @@ async function request<T>(path: string, opts: RequestOpts = {}): Promise<T> {
     } catch {
       // non-JSON error body — fall through with empty envelope
     }
+    if (res.status === 401 && typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(AUTH_EXPIRED_EVENT));
+    }
     throw new ApiError({
       code: envelope.error?.code ?? "unknown_error",
       message: envelope.error?.message ?? `HTTP ${res.status}`,
@@ -120,14 +129,14 @@ export function signup(payload: {
   email: string;
   password: string;
   displayName: string;
-}): Promise<{ user: User; session: Session }> {
+}): Promise<{ user: AuthUser; session: Session }> {
   return request("/auth/signup", { method: "POST", body: payload });
 }
 
 export function login(payload: {
   email: string;
   password: string;
-}): Promise<{ user: User; session: Session }> {
+}): Promise<{ user: AuthUser; session: Session }> {
   return request("/auth/login", { method: "POST", body: payload });
 }
 

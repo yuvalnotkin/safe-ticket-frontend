@@ -52,6 +52,10 @@ export type User = {
   updatedAt: string; // ISO 8601
 };
 
+// /auth/signup and /auth/login return only the auth-domain fields of the user.
+// Full profile (phone, avatarUrl, timestamps) comes from /auth/me afterward.
+export type AuthUser = Pick<User, "id" | "email" | "displayName">;
+
 export type Profile = User; // /users/me/profile returns same shape as /auth/me
 
 export type ListingsQuery = {
