@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { AuthLayout } from "@/components/auth/AuthLayout";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useToast } from "@/components/ui/Toast";
@@ -28,9 +29,9 @@ export default function SignupPage() {
 
 function SignupPageFallback() {
   return (
-    <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
-      <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10" />
-    </section>
+    <AuthLayout>
+      <div className="w-full rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10" />
+    </AuthLayout>
   );
 }
 
@@ -90,8 +91,8 @@ function SignupPageInner() {
   }
 
   return (
-    <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
-      <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10">
+    <AuthLayout>
+      <div className="w-full rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10">
         <h1 className="font-display text-h1 font-medium leading-tight text-ink">
           {t("auth.signupTitle")}
         </h1>
@@ -170,11 +171,7 @@ function SignupPageInner() {
             {t("auth.loginLink")}
           </Link>
         </p>
-
-        <div className="mt-8 rounded-md border border-sage/30 bg-success-bg p-4">
-          <p className="text-small text-forest-900">{t("auth.trustCopy")}</p>
-        </div>
       </div>
-    </section>
+    </AuthLayout>
   );
 }

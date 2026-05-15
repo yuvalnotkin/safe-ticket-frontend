@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { AuthLayout } from "@/components/auth/AuthLayout";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { ApiError } from "@/lib/api";
@@ -38,9 +39,9 @@ export default function LoginPage() {
 
 function LoginPageFallback() {
   return (
-    <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
-      <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10" />
-    </section>
+    <AuthLayout>
+      <div className="w-full rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10" />
+    </AuthLayout>
   );
 }
 
@@ -94,8 +95,8 @@ function LoginPageInner() {
   }
 
   return (
-    <section className="flex flex-1 items-center justify-center px-6 py-20 md:py-24">
-      <div className="w-full max-w-md rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10">
+    <AuthLayout>
+      <div className="w-full rounded-xl border border-border bg-bone p-8 shadow-sm md:p-10">
         <h1 className="font-display text-h1 font-medium leading-tight text-ink">
           {t("auth.loginTitle")}
         </h1>
@@ -161,7 +162,7 @@ function LoginPageInner() {
           </Link>
         </p>
 
-        <div className="my-8 flex items-center gap-3">
+        <div className="my-6 flex items-center gap-3">
           <span className="h-px flex-1 bg-border" />
           <span className="text-micro uppercase tracking-[0.12em] text-ink-3">
             {t("common.or")}
@@ -176,14 +177,10 @@ function LoginPageInner() {
           <Button variant="secondary" size="md" disabled leadingIcon={<AppleIcon />}>
             {t("auth.appleCta")}
           </Button>
-          <p className="text-caption text-ink-3">{t("auth.socialDisabled")}</p>
-        </div>
-
-        <div className="mt-8 rounded-md border border-sage/30 bg-success-bg p-4">
-          <p className="text-small text-forest-900">{t("auth.trustCopy")}</p>
+          <p className="mt-1 text-caption text-ink-3">{t("auth.socialDisabled")}</p>
         </div>
       </div>
-    </section>
+    </AuthLayout>
   );
 }
 
