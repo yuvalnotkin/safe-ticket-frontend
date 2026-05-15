@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
 
 // Phase 2 deliverable: an auth-gated empty-state shell only. No mock data,
 // no fake purchase rows, no skeleton-pretending-to-be-data — the real buyer
@@ -9,31 +9,96 @@ import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function BuyerDashboardPage() {
   const { t } = useLanguage();
-  return (
-    <section className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-8 px-4 py-10 md:px-12 md:py-16">
-      <header className="flex flex-col gap-2">
-        <h1 className="font-display text-h1 font-medium leading-tight text-ink">
-          {t("dashboard.buyerTitle")}
-        </h1>
-      </header>
 
-      <div className="flex flex-col items-center gap-4 rounded-lg border border-dashed border-border-strong bg-bone p-12 text-center">
-        <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
-          {t("dashboard.buyerEyebrow")}
-        </span>
-        <h2 className="font-display text-h2 font-medium text-ink">
-          {t("dashboard.buyerHeading")}
-        </h2>
-        <p className="max-w-md text-body text-ink-2">
-          {t("dashboard.buyerBody")}
-        </p>
-        <Link
-          href="/search"
-          className="mt-2 inline-flex h-11 items-center rounded-md border border-forest-900 px-5 text-small font-medium text-forest-900 transition-colors hover:bg-forest-900 hover:text-cream focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
-        >
-          {t("dashboard.browseCta")}
-        </Link>
-      </div>
-    </section>
+  return (
+    <DashboardShell
+      eyebrow={t("nav.buyerDashboard")}
+      title={t("dashboard.buyerTitle")}
+      subtitle={t("dashboard.buyerSubtitle")}
+      empty={{
+        eyebrow: t("dashboard.buyerEyebrow"),
+        heading: t("dashboard.buyerHeading"),
+        body: t("dashboard.buyerBody"),
+        cta: { href: "/search", label: t("dashboard.browseCta") },
+        icon: <TicketIcon />,
+      }}
+      preview={{
+        eyebrow: t("dashboard.previewEyebrow"),
+        items: [
+          {
+            icon: <ReceiptIcon />,
+            title: t("dashboard.buyerPreview1Title"),
+            body: t("dashboard.buyerPreview1Body"),
+          },
+          {
+            icon: <TransferIcon />,
+            title: t("dashboard.buyerPreview2Title"),
+            body: t("dashboard.buyerPreview2Body"),
+          },
+          {
+            icon: <ShieldIcon />,
+            title: t("dashboard.buyerPreview3Title"),
+            body: t("dashboard.buyerPreview3Body"),
+          },
+        ],
+      }}
+    />
+  );
+}
+
+function TicketIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      className="h-6 w-6"
+      aria-hidden="true"
+    >
+      <path
+        d="M4 9V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path d="M14 7v10" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2" />
+    </svg>
+  );
+}
+
+function ReceiptIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <path
+        d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M9 8h6M9 12h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function TransferIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <path d="M4 8h13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="m13 4 4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M20 16H7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="m11 20-4-4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ShieldIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <path
+        d="M12 3 4 6v6c0 4.5 3.4 8.4 8 9 4.6-.6 8-4.5 8-9V6l-8-3Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }

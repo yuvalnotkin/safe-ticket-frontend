@@ -17,6 +17,22 @@ vi.mock("@/lib/i18n/LanguageProvider", () => ({
   }),
 }));
 
+// DashboardShell reads the cached user from AuthContext for the optional
+// greeting line. Stub it out: the shell test doesn't render through
+// AuthProvider, and the greeting is decorative — we only assert on
+// translation keys here.
+vi.mock("@/lib/auth/AuthContext", () => ({
+  useAuth: () => ({
+    user: null,
+    status: "loading",
+    session: null,
+    signup: vi.fn(),
+    login: vi.fn(),
+    logout: vi.fn(),
+    setUser: vi.fn(),
+  }),
+}));
+
 afterEach(() => cleanup());
 
 describe("BuyerDashboardPage shell", () => {
