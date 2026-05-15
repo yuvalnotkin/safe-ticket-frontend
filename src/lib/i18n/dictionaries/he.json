@@ -258,6 +258,7 @@
     "noAccountQuestion": "אין לכם חשבון?",
     "signupLink": "הרשמה",
     "invalidCredentials": "אימייל או סיסמה שגויים.",
+    "signupSuccessToast": "החשבון נוצר — ברוכים הבאים, {name}.",
     "signupFailed": "לא הצלחנו ליצור את החשבון — ייתכן שהאימייל כבר רשום.",
     "invalidRequest": "חלק מהשדות זקוקים לתיקון.",
     "genericError": "משהו השתבש אצלנו. נסו שוב.",

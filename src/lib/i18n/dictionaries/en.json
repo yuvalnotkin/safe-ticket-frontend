@@ -258,6 +258,7 @@
     "noAccountQuestion": "Don't have an account?",
     "signupLink": "Sign up",
     "invalidCredentials": "Email or password incorrect.",
+    "signupSuccessToast": "Account created — welcome, {name}.",
     "signupFailed": "Could not create account — the email may already be in use.",
     "invalidRequest": "Some of the fields above need attention.",
     "genericError": "Something went wrong on our end. Try again.",
