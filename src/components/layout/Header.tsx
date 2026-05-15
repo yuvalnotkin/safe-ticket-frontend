@@ -178,6 +178,15 @@ export function Header() {
         </div>
 
         <div className="ms-auto flex items-center gap-2 md:hidden">
+          {isAuthed && user && (
+            <span
+              data-testid="mobile-greeting"
+              aria-label={`${t("nav.hiPrefix")}${user.displayName}`}
+              className="max-w-[10ch] truncate text-small font-medium text-ink"
+            >
+              {t("nav.hiPrefix")}{user.displayName.split(/\s+/)[0]}
+            </span>
+          )}
           <Link
             href="/search"
             aria-label={t("nav.searchAria")}

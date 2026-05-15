@@ -59,7 +59,7 @@ function LoginPageInner() {
   const [formDetails, setFormDetails] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
-  const next = searchParams.get("next") ?? "/profile";
+  const next = searchParams.get("next") ?? "/";
   const signupHref = `/signup?next=${encodeURIComponent(next)}`;
 
   async function onSubmit(e: FormEvent) {

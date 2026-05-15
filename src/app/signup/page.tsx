@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { useToast } from "@/components/ui/Toast";
 import { ApiError } from "@/lib/api";
 import {
   mapInvalidRequestDetails,
@@ -36,6 +37,7 @@ function SignupPageFallback() {
 function SignupPageInner() {
   const { t } = useLanguage();
   const { signup } = useAuth();
+  const { show: showToast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -48,7 +50,7 @@ function SignupPageInner() {
   const [formDetails, setFormDetails] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
-  const next = searchParams.get("next") ?? "/profile";
+  const next = searchParams.get("next") ?? "/";
   const loginHref = `/login?next=${encodeURIComponent(next)}`;
 
   async function onSubmit(e: FormEvent) {
@@ -59,6 +61,11 @@ function SignupPageInner() {
     setSubmitting(true);
     try {
       await signup({ email, password, displayName });
+      const firstName = displayName.split(/\s+/)[0];
+      showToast(
+        t("auth.signupSuccessToast").replace("{name}", firstName),
+        { tone: "success" },
+      );
       router.push(next);
     } catch (err) {
       if (err instanceof ApiError) {
