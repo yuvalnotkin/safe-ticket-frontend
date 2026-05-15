@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
 
 // Phase 2 deliverable: an auth-gated empty-state shell only. No mock data,
 // no fake listing rows. The real seller surface (connect provider, list at
@@ -9,31 +9,88 @@ import { useLanguage } from "@/lib/i18n/LanguageProvider";
 
 export default function SellerDashboardPage() {
   const { t } = useLanguage();
-  return (
-    <section className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-8 px-4 py-10 md:px-12 md:py-16">
-      <header className="flex flex-col gap-2">
-        <h1 className="font-display text-h1 font-medium leading-tight text-ink">
-          {t("dashboard.sellerTitle")}
-        </h1>
-      </header>
 
-      <div className="flex flex-col items-center gap-4 rounded-lg border border-dashed border-border-strong bg-bone p-12 text-center">
-        <span className="text-micro font-medium uppercase tracking-[0.12em] text-ink-3">
-          {t("dashboard.sellerEyebrow")}
-        </span>
-        <h2 className="font-display text-h2 font-medium text-ink">
-          {t("dashboard.sellerHeading")}
-        </h2>
-        <p className="max-w-md text-body text-ink-2">
-          {t("dashboard.sellerBody")}
-        </p>
-        <Link
-          href="/search"
-          className="mt-2 inline-flex h-11 items-center rounded-md border border-forest-900 px-5 text-small font-medium text-forest-900 transition-colors hover:bg-forest-900 hover:text-cream focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sage/30"
-        >
-          {t("dashboard.browseCta")}
-        </Link>
-      </div>
-    </section>
+  return (
+    <DashboardShell
+      eyebrow={t("nav.sellerDashboard")}
+      title={t("dashboard.sellerTitle")}
+      subtitle={t("dashboard.sellerSubtitle")}
+      empty={{
+        eyebrow: t("dashboard.sellerEyebrow"),
+        heading: t("dashboard.sellerHeading"),
+        body: t("dashboard.sellerBody"),
+        cta: { href: "/search", label: t("dashboard.browseCta") },
+        icon: <ListIcon />,
+      }}
+      preview={{
+        eyebrow: t("dashboard.previewEyebrow"),
+        items: [
+          {
+            icon: <PlugIcon />,
+            title: t("dashboard.sellerPreview1Title"),
+            body: t("dashboard.sellerPreview1Body"),
+          },
+          {
+            icon: <TagIcon />,
+            title: t("dashboard.sellerPreview2Title"),
+            body: t("dashboard.sellerPreview2Body"),
+          },
+          {
+            icon: <PayoutIcon />,
+            title: t("dashboard.sellerPreview3Title"),
+            body: t("dashboard.sellerPreview3Body"),
+          },
+        ],
+      }}
+    />
+  );
+}
+
+function ListIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <path d="M8 6h12M8 12h12M8 18h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="4" cy="6" r="1" fill="currentColor" />
+      <circle cx="4" cy="12" r="1" fill="currentColor" />
+      <circle cx="4" cy="18" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function PlugIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <path
+        d="M9 4v3m6-3v3M7 7h10v4a5 5 0 0 1-5 5 5 5 0 0 1-5-5V7Zm5 9v4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function TagIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <path
+        d="M3 12V4h8l10 10-8 8L3 12Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="9" r="1.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function PayoutIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden="true">
+      <rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M3 10h18" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="16" cy="14.5" r="1.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
   );
 }
